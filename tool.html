@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Research Tool</title>
+  <title>ALL CAN</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
@@ -19,6 +19,8 @@
       --light-grey:  #d8d8d8;
       --highlight-white: #FFFFFF;
       --error-red: #dc2626;
+      --story-blue: #3B82F6;
+      --story-blue-hover: #60A5FA;
       --font-family: 'Rubik', Arial, Helvetica, sans-serif;
     }
     
@@ -29,410 +31,6 @@
       background:var(--bg-white); 
     }
     #wrap { display:flex; height:100vh; overflow:hidden; }
-
-    /* ENTITY MANAGER PANEL (LEFT) */
-    #entity-manager {
-      width: 292px;
-      min-width: 292px;
-      background: var(--panel-grey);
-      color: var(--text-black);
-      padding: 16px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--shadow-grey);
-      font-size: 13px;
-      overflow: hidden;
-    }
-
-    .manager-section {
-      margin-bottom: 16px;
-    }
-    
-    .manager-section h3 {
-      margin: 0 0 8px 0;
-      font-size: 14px;
-      font-weight: 700;
-      opacity: 0.7;
-    }
-    
-    .upload-area {
-      border: 2px dashed var(--shadow-grey);
-      border-radius: 8px;
-      padding-top: 0px;
-      padding-left: 3px;
-      padding-right: 3px;
-      padding-bottom: 0px;
-      text-align: center;
-      background: var(--light-grey);
-    }
-    
-    .button-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 6px;
-      margin-bottom: 4px;
-      margin-top: 4px;
-      margin-left: 12px;
-      margin-right: 12px;
-      justify-content: center;
-    }
-    
-    .icon-btn.save-btn {
-      grid-column: 4;
-      grid-row: 1 / 3;
-    }
-    
-    .icon-btn {
-      flex: 1;
-      padding: 4px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-family: var(--font-family);
-      font-size: 12px;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .add-btn {
-      background: var(--light-grey);
-      color: var(--text-black);
-    }
-    
-    .add-btn:hover {
-      background: var(--light-yellow);
-    }
-
-    .upload-btn {
-      background: var(--light-grey);
-      color: var(--text-black);
-    }
-    
-    .upload-btn:hover {
-      background: var(--light-yellow);
-    }
-    
-    .download-btn {
-      background: var(--light-grey);
-      color: var(--text-black);
-    }
-    
-    .download-btn:hover {
-      background: var(--light-yellow);
-    }
-    
-    /* .download-btn.unsaved {
-      background: rgba(70,248,128,0.2);
-      animation: pulse 2s infinite;
-    } */
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-    
-    @keyframes pulseGlow {
-      50%, 100% { 
-        box-shadow: 0 0 7px 2px rgba(255, 210, 65, 0.8);
-      }
-      50% { 
-        box-shadow: 0 0 15px 5px rgba(255, 210, 65, 1);
-      }
-    }
-    
-    #file-input-entities, #file-input-connections, #file-input-formatting,
-    #file-input-add-entities, #file-input-add-connections, #file-input-add-formatting {
-      display: none;
-    }
-    
-    .status-msg {
-      margin-top: 0px;
-      margin-bottom: 8px;
-      font-size: 11px;
-      color: var(--text-black);
-      min-height: 14px;
-      font-weight: 700;
-    }
-    
-    .status-msg.error {
-      color: var(--error-red);
-    }
-
-    /* TAB BUTTONS */
-    .tab-buttons {
-      display: flex;
-      gap: 2px;
-      margin-bottom: 0px;
-    }
-    
-    .tab-btn {
-      flex: 1;
-      font-family: var(--font-family);
-      color: var(--near-black);
-      background: var(--light-grey);
-      border: 1px solid var(--shadow-grey);
-      border-bottom: none;
-      border-radius: 8px 8px 0 0;
-      padding-top: 4px;
-      padding-bottom: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    
-    .tab-btn img {
-      width: 24px;
-      height: 24px;
-      display: block;
-    }
-    
-    .tab-btn:hover {
-      background: var(--light-grey);
-    }
-    
-    .tab-btn.active {
-      font-weight: bold;
-      color: var(--text-black);
-      background: var(--shadow-grey);
-      border-color: var(--shadow-grey);
-      border-bottom: 1px solid var(--shadow-grey);
-      z-index: 1;
-    }
-    
-    /* FORMATTING MENU */
-    #formatting-menu {
-      flex: 1;
-      overflow-y: auto;
-      display: none;
-      flex-direction: column;
-      background: var(--light-grey);
-      border-radius: 0 0 10px 10px;  /* No top-left radius */
-      border: 1px solid var(--shadow-grey);
-      padding: 0px;
-    }
-
-    .format-header {
-      display: grid;
-      gap: 0px;
-      padding-top: 13px;
-      padding-bottom: 12px;
-      padding-left: 4px;
-      padding-right: 0px;
-      width: 258px;
-      height: 42px;
-      background: var(--shadow-grey);
-      border-bottom: 1px solid var(--text-black);
-      font-weight: 700;
-      font-size: 11px;
-      font-family: var(--font-family);
-      align-items: left;
-      justify-content: center;
-      position: sticky; top: 0;
-      z-index: 10; /* or higher */
-      background: var(--shadow-grey); /* important: ensures solid cover */
-    }
-    
-    .format-control input[type="color"] {
-      width: 73px;
-      height: 32px;
-      margin-left: 10px;
-      margin-right: 10px;
-      border: 1px solid var(--shadow-grey);
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    .format-control input[type="number"] {
-      width: 60px;
-      padding: 6px;
-      margin-left: 10px;
-      margin-right: 10px;
-      border: 1px solid var(--shadow-grey);
-      border-radius: 4px;
-      font-family: var(--font-family);
-      font-size: 12px;
-    }
-
-    .format-subheader {
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: solid var(--near-black);
-      margin-bottom: 6px;
-      border-bottom: 1px solid var(--shadow_grey);
-      padding-top: 12px;
-      padding-left: 8px;
-      padding-bottom: 2px;
-    }
-
-    .format-divider {
-      border: none;
-      border-top: 1px solid var(--shadow-grey);
-      margin: 12px 0;
-    }
-
-    .format-control {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 6px 0;
-    }
-
-    .format-control label {
-      font-size: 13px;
-      color: var(--text-black);
-      padding-left: 16px;
-    }
-
-    .format-control input {
-      margin-left: 8px;
-    }
-
-    .format-section-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .format-section-header input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-      margin: 0;
-      margin-left: 8px;
-    }
-    
-    .format-section-header h3 {
-      flex: 1;
-      margin-bottom: 0;
-    }
-    
-    .format-section.disabled .format-control {
-      opacity: 0.4;
-      pointer-events: none;
-    }
-    
-    .format-section.disabled .format-control input,
-    .format-section.disabled .format-control select {
-      cursor: not-allowed;
-    }
-
-    /* ENTITY TABLE */
-    #entity-table-container {
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      background: var(--light-grey);
-      border-radius: 0 0px 10px 10px;  /* No top-left radius */
-      border: 1px solid var(--shadow-grey);
-    }
-    
-    .table-header {
-      display: grid;
-      grid-template-columns: 1fr 60px 20px;
-      gap: 6px;
-      padding-top: 4px;
-      padding-bottom: 0px;
-      padding-left: 8px;
-      padding-right: 10px;
-      background: var(--shadow-grey);
-      border-bottom: 1px solid var(--text-black);
-      font-weight: 700;
-      font-size: 11px;
-      text-transform: uppercase;
-      align-items: center;
-    }
-    
-    .show-controls {
-      display: flex;
-      flex-direction: column; /* Stack vertically */
-      gap: 4px;
-      /* justify-content: center; */
-      align-items: center;
-    }
-    
-    /* new helper for the two buttons to sit horizontally */
-    .show-buttons {
-      display: flex;
-      flex-direction: row;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .show-toggle-btn {
-      background: var(--main-yellow);
-      color: var(--text-black);
-      border: none;
-      border-radius: 3px;
-      padding: 2px 4px;
-      cursor: pointer;
-      font-size: 9px;
-      font-family: var(--font-family);
-      font-weight: 700;
-    }
-    
-    .show-toggle-btn:hover {
-      background: var(--light-yellow);
-      color: var(--text-black);
-    }
-    
-    #entity-table {
-      flex: 1;
-      overflow-y: auto;
-      padding: 4px;
-    }
-    
-    .entity-row {
-      display: grid;
-      grid-template-columns: 1fr 64px 20px;
-      gap: 4px;
-      padding: 6px 6px;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-      align-items: center;
-    }
-    
-    .entity-row:hover {
-      background: rgba(255,255,255,0.5);
-    }
-    
-    .entity-row.selected {
-      background: var(--light-yellow);
-    }
-    
-    .entity-name {
-      cursor: pointer;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 12px;
-    }
-    
-    .entity-name:hover {
-      color: var(--shadow-yellow);
-    }
-    
-    .entity-checkbox {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-      margin: 0 auto;
-      display: block;
-    }
-    
-    .empty-state {
-      padding: 40px 20px;
-      text-align: center;
-      color: var(--shadow-grey);
-    }
 
     /* GRAPH AREA */
     #graph-area { position:relative; flex:1; background:var(--bg-white); }
@@ -490,9 +88,9 @@
 
     /* INFO PANEL (RIGHT) */
     #info-panel {
-      width: 292px;
-      min-width: 292px;
-      max-width: 292px;
+      width: 500px;
+      min-width: 500px;
+      max-width: 500px;
       background: var(--panel-grey);
       color: var(--text-black);
       padding: 12px;
@@ -503,6 +101,52 @@
       font-size: 13px;
       height: 100vh;
       overflow: hidden;
+      transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, padding 0.3s ease;
+      position: relative;
+    }
+    
+    #info-panel.collapsed {
+      width: 0;
+      min-width: 0;
+      max-width: 0;
+      padding: 0;
+      border-left: none;
+      overflow: hidden;
+    }
+    
+    #info-panel.collapsed > * {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    /* PANEL TOGGLE BUTTON */
+    #panel-toggle {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      z-index: 15;
+      padding: 40px 4px;
+      border-radius: 4px 0 0 4px;
+      border: none;
+      cursor: pointer;
+      background: var(--panel-grey);
+      color: var(--text-black);
+      font-size: 12px;
+      font-family: var(--font-family);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-left: 1px solid var(--shadow-grey);
+      border-top: 1px solid var(--shadow-grey);
+      border-bottom: 1px solid var(--shadow-grey);
+    }
+    
+    #panel-toggle:hover {
+      background: var(--light-yellow);
+      border-left: 1px solid var(--light-yellow);
+      border-top: 1px solid var(--light-yellow);
+      border-bottom: 1px solid var(--light-yellow);
     }
     
     #controls { 
@@ -538,6 +182,11 @@
     
     #search-btn:hover, #clear-btn:hover {
       background: var(--light-yellow);
+    }
+    
+    /* Hide search buttons in story mode */
+    .story-mode-hide {
+      display: none !important;
     }
 
     #suggestions { 
@@ -623,318 +272,172 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* CONFIRM DIALOG */
-    #confirm-dialog {
-      position: fixed;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.5);
-      z-index: 100000;
-    }
-    
-    .confirm-box {
-      background: var(--highlight-white);
-      border: 2px solid var(--text-black);
-      border-radius: 8px;
-      padding: 24px;
-      max-width: 400px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    
-    .confirm-message {
-      font-size: 16px;
-      margin-bottom: 20px;
-      color: var(--text-black);
-      font-weight: 600;
-    }
-    
-    .confirm-buttons {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-    
-    .confirm-btn {
-      padding: 8px 20px;
+
+    /* STORY MODE BUTTONS */
+    #story-btn {
+      padding: 8px 8px;
+      border-radius: 4px;
       border: none;
-      border-radius: 6px;
       cursor: pointer;
+      background: var(--story-blue);
+      color: white;
       font-family: var(--font-family);
-      font-weight: 600;
-      font-size: 14px;
+      font-weight: bold;
+      flex-shrink: 0;
+      white-space: nowrap;
+      margin-bottom: 8px;
+      width: 100%;
+      display: none;
+      animation: glow 2s ease-in-out infinite;
     }
-    
-    .confirm-yes {
+
+    #story-btn:hover {
+      background: var(--story-blue-hover);
+    }
+
+    #story-nav-container {
+      display: none;
+      gap: 4px;
+      margin-top: 14px;
+      flex-shrink: 0;
+    }
+
+    #story-nav-container.active {
+      display: flex;
+    }
+
+    .story-nav-btn {
+      padding: 8px 6px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: var(--story-blue);
+      color: white;
+      font-family: var(--font-family);
+      font-weight: bold;
+      font-size: 12px;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .story-nav-btn:hover:not(:disabled) {
+      background: var(--story-blue-hover);
+    }
+
+    .story-nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 5px var(--story-blue); }
+      50% { box-shadow: 0 0 20px var(--story-blue), 0 0 30px var(--story-blue-hover); }
+    }
+
+    /* ENTITY MODAL IN STORY MODE */
+    #entity-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--panel-grey);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+
+    #entity-modal.active {
+      display: flex;
+    }
+
+    #entity-modal-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
       background: var(--error-red);
       color: white;
+      font-family: var(--font-family);
+      font-weight: bold;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
     }
-    
-    .confirm-yes:hover {
+
+    #entity-modal-close:hover {
       background: #b91c1c;
     }
-    
-    .confirm-no {
-      background: var(--shadow-grey);
-      color: white;
-    }
-    
-    .confirm-no:hover {
-      background: var(--text-black);
+
+    #entity-modal-content {
+      flex: 1;
+      overflow: auto;
+      margin-top: 8px;
     }
 
+    /* VIEW CONTENT STYLES */
+    #view-content {
+      display: none;
+    }
 
-    /* Disabled overlay */
-    .disabled-overlay {
-      opacity: 0.5;
-      pointer-events: none;
+    #view-content.active {
+      display: block;
+    }
+
+    .view-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-black);
+    }
+
+    .view-progress {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--shadow-grey);
+      margin-bottom: 12px;
+    }
+
+    .view-image {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      object-fit: contain;
+    }
+
+    .view-text {
+      font-size: 15px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
 
     /* responsive */
-    @media (max-width: 1200px) { 
-      #entity-manager { width: 280px; min-width: 280px; }
-      #entity-toggle.panel-open { left: 280px; }
-      #info-panel { width: 280px; min-width: 280px; max-width: 280px; } 
+    @media (max-width: 900px) { 
+      #info-panel { width: 260px; min-width: 260px; max-width: 260px; } 
     }
   </style>
 </head>
 <body>
   <div id="wrap">
-    
-    <aside id="entity-manager">
-      <div class="manager-section">
-        <div class="upload-area">
-          <br>
-          <p style="margin: 0 0 8px 0; opacity: 0.7; font-size: 13px;">
-            <a href="https://docs.google.com/presentation/d/e/2PACX-1vRNfGtXRnwofGlAjKaeIbvKVWtlvpLfEK72sobg8WMamiZ9akXBC97C6PWJQstHp7iCLk-WPgSvlS9k/pub?start=false&loop=false&delayms=30000" target="_blank" style="color: inherit; text-decoration: underline;">
-              Learn how to start using this tool
-            </a>
-          </p>
-
-          <input type="file" id="file-input-entities" accept=".csv" />
-          <input type="file" id="file-input-connections" accept=".csv" />
-          <input type="file" id="file-input-formatting" accept=".csv" />
-          <input type="file" id="file-input-add-entities" accept=".csv" />
-          <input type="file" id="file-input-add-connections" accept=".csv" />
-          <input type="file" id="file-input-add-formatting" accept=".csv" />
-
-          <div class="button-row">
-            <button class="icon-btn upload-btn" onclick="document.getElementById('file-input-entities').click()" title="Upload Entities">
-              <img src="https://i.ibb.co/HfxVTtr4/upE.png" alt="Upload Entities" style="width:40px; height:40px;">
-              <!-- <div style="font-size: 10px; margin-top: 2px;">Replace Entities.csv</div> -->
-            </button>
-            <button class="icon-btn upload-btn" onclick="document.getElementById('file-input-connections').click()" title="Upload Connections">
-              <img src="https://i.ibb.co/LBG9j3L/upC.png" alt="Upload Connections" style="width:40px; height:40px;">
-              <!-- <div style="font-size: 10px; margin-top: 2px;">Replace Connections.csv</div> -->
-            </button>
-            <button class="icon-btn upload-btn" onclick="document.getElementById('file-input-formatting').click()" title="Upload Formatting">
-              <img src="https://i.ibb.co/pHD1d7N/upF.png" alt="Upload Formatting" style="width:40px; height:40px;">
-              <!-- <div style="font-size: 10px; margin-top: 2px;">Replace Formatting.csv</div> -->
-            </button>
-            <button class="icon-btn download-btn save-btn" id="download-btn" onclick="handleDownload()" title="Save">
-              <img src="https://i.ibb.co/9kyv57Pz/downicon1.png" alt="Save" style="width:50px; height:50px;">
-            </button>
-            <button class="icon-btn add-btn" onclick="document.getElementById('file-input-add-entities').click()" title="Add Entities">
-              <img src="https://i.ibb.co/XxYLrMM2/addE.png" alt="Add Entities" style="width:40px; height:40px;">
-              <!-- <div style="font-size: 10px; margin-top: 2px;">Add Entities.csv</div> -->
-            </button>
-            <button class="icon-btn add-btn" onclick="document.getElementById('file-input-add-connections').click()" title="Add Connections">
-              <img src="https://i.ibb.co/Rkrn72kj/addC.png" alt="Add Connections" style="width:40px; height:40px;">
-              <!-- <div style="font-size: 10px; margin-top: 2px;">Add Connections.csv</div> -->
-            </button>
-            <button class="icon-btn add-btn" onclick="document.getElementById('file-input-add-formatting').click()" title="Add Formatting">
-              <img src="https://i.ibb.co/Zzk0nbN2/downF.png" alt="Add Formatting" style="width:40px; height:40px;">
-              <!-- <div style="font-size: 10px; margin-top: 2px;">Add Formatting.csv</div> -->
-            </button>
-          </div>
-
-          <div class="status-msg" id="status-msg"></div>
-        </div>
-      </div>
-      
-      <div class="manager-section" style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
-        <div class="tab-buttons">
-          <button class="tab-btn active" id="entities-tab" title="Entities List">
-            Entities List
-          </button>
-          <button class="tab-btn" id="formatting-tab" title="Formatting Menu">
-            Formatting
-          </button>
-        </div>
-        
-        <div id="entity-table-container">
-          <div class="table-header">
-            <div>Name</div>
-              <div class="show-controls">
-                <span style="font-size: 10px;">Show</span>
-                <div class="show-buttons">
-                  <button class="show-toggle-btn" onclick="toggleAllShow(true)" title="Show All">All</button>
-                  <button class="show-toggle-btn" onclick="toggleAllShow(false)" title="Hide All">None</button>
-                </div>
-              </div>
-            <div style="text-align: center;">Fix</div>
-            <div></div>
-          </div>
-          <div id="entity-table">
-            <div class="empty-state">
-              Upload CSVs to get started
-            </div>
-          </div>
-        </div>
-        
-        <div id="formatting-menu">
-          <div class="format-header">
-            <select id="format-rule-selector" style="width: 100%; height: 100%; border: none; background: var(--shadow-grey); color: var(--text-black); font-family: var(--font-family); font-size: 14px; font-weight: 700; text-align: center; cursor: pointer; padding: 0 30px 0 10px; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 8%22><path fill=%22%23020202%22 d=%22M0 0l6 8 6-8z%22/></svg>'); background-repeat: no-repeat; background-position: right 10px center; background-size: 10px;">
-              <option value="default">DEFAULT FORMAT</option>
-              <optgroup label="───────────────" disabled></optgroup>
-              <option value="create-entity">+ Create a new Entity rule</option>
-              <option value="create-category">+ Create a new Category rule</option>
-            </select>
-          </div>
-          <div id="rule-controls" style="display: none; padding: 8px; background: var(--light-grey); border-bottom: 1px solid var(--shadow-grey); flex-direction:row-reverse ; gap: 4px; ">
-            <button id="rule-delete-btn" style="width: 30px; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-family: var(--font-family); font-size: 11px; font-weight: 600; background: var(--error-red); color: white;" title="Delete Rule">×</button>
-            <button id="rule-down-btn" style="width: 30px; padding: 6px 9px; border: none; border-radius: 4px; cursor: pointer; font-family: var(--font-family); font-size: 11px; font-weight: 600; background: var(--panel-grey); color: var(--text-black);" title="Move Rule Down">▼</button>
-            <button id="rule-up-btn" style="width: 30px; padding: 6px 9px; border: none; border-radius: 4px; cursor: pointer; font-family: var(--font-family); font-size: 11px; font-weight: 600; background: var(--panel-grey); color: var(--text-black);" title="Move Rule Up">▲</button>
-            <label style="display: block; font-size: 11px; padding-top: 6px; padding-right: 6px; font-family: var(--font-family); color: var(--shadow-grey);">Rule controls:</label>
-          </div>
-          
-          <!-- Rule Name Input (shown when creating/editing a rule) -->
-          <div id="rule-name-section" style="display: none; padding: 12px; background: var(--light-grey); border-bottom: 1px solid var(--shadow-grey);">
-            <label style="display: block; font-size: 11px; font-weight: 700; margin-bottom: 4px; font-family: var(--font-family); color: var(--near-black);">RULE NAME</label>
-            <input type="text" id="rule-name-input" placeholder="Enter rule name" style="width: 100%; padding: 8px; border: 1px solid var(--shadow-grey); border-radius: 4px; font-family: var(--font-family); font-size: 13px; box-sizing: border-box; ">
-          </div>
-          
-          <!-- Target Selection (shown when creating/editing entity/category rules) -->
-          <div id="rule-targets-section" style="display: none; padding: 12px; background: var(--light-grey); border-bottom: 1px solid var(--shadow-grey);">
-            <label style="display: block; font-size: 11px; font-weight: 700; margin-bottom: 4px; font-family: var(--font-family); color: var(--near-black);" id="rule-targets-label">TARGETS</label>
-            <input type="text" id="rule-targets-search" placeholder="Search..." style="width: 100%; padding: 8px; border: 1px solid var(--shadow-grey); border-radius: 4px; font-family: var(--font-family); font-size: 13px; box-sizing: border-box; margin-bottom: 8px;">
-            <div id="rule-targets-list" style="max-height: 150px; overflow-y: auto; border: 1px solid var(--shadow-grey); border-radius: 4px; background: white; padding: 4px; margin-bottom: 8px;"></div>
-            <div id="rule-selected-targets" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
-          </div>
-          
-          <div class="format-section" id="node-section">
-          <div class="format-section-header">
-            <input type="checkbox" id="fmt-node-enabled" title="Enable custom node color for this rule" style="display: none;">
-            <h3 class="format-subheader" style="padding-top: 12px;">Node</h3>
-          </div>
-          <div class="format-control">
-            <label>Color</label>
-            <input type="color" id="fmt-node-color" value="#000000">
-          </div>
-          <div class="format-control" id="node-hover-color-control">
-            <label>Hover Color</label>
-            <input type="color" id="fmt-node-hover-color" value="#FFD241">
-          </div>
-          </div>
-          <div class="format-section" id="outline-section">
-          <div class="format-section-header">
-            <input type="checkbox" id="fmt-outline-enabled" title="Enable custom outline for this rule" style="display: none;">
-            <h3 class="format-subheader">Node Outline</h3>
-          </div>
-          <div class="format-control">
-            <label>Color</label>
-            <input type="color" id="fmt-outline-color" value="#dadada">
-          </div>
-          <div class="format-control" id="outline-hover-color-control">
-            <label>Hover Color</label>
-            <input type="color" id="fmt-outline-hover-color" value="#FFD241">
-          </div>
-          <div class="format-control">
-            <label>Thickness</label>
-            <input type="number" id="fmt-outline-thickness" value="4" min="0" max="10" step="0.5">
-          </div>
-          <div class="format-control" id="outline-hover-thickness-control">
-            <label>Hover Thickness</label>
-            <input type="number" id="fmt-outline-hover-thickness" value="5" min="0" max="10" step="0.5">
-          </div>
-          </div>
-          <div class="format-section" id="size-section">
-          <div class="format-section-header">
-            <input type="checkbox" id="fmt-size-enabled" title="Enable custom size for this rule" style="display: none;">
-            <h3 class="format-subheader">Node Size</h3>
-          </div>
-          <div class="format-control" id="size-mode-control">
-            <label>Size Mode</label>
-            <select id="fmt-size-mode" style="padding: 6px; margin-right: 10px; border: 1px solid var(--shadow-grey); border-radius: 4px; font-family: var(--font-family); font-size: 12px;">
-              <option value="connections"># of Connections</option>
-              <option value="custom">Custom Size</option>
-            </select>
-          </div>
-          <div class="format-control" id="custom-size-checkbox-control" style="display: none;">
-            <label>Custom Size</label>
-            <input type="checkbox" id="fmt-custom-size-enabled" style="margin-right: 10px;">
-          </div>
-          <div class="format-control" id="custom-size-control" style="display: none;">
-            <label>Custom Size (px)</label>
-            <input type="number" id="fmt-custom-size" min="1" value="20">
-          </div>
-          <div class="format-control" id="min-size-control">
-            <label>Min Size (px)</label>
-            <input type="number" id="fmt-min-size" min="1" max="50" value="5">
-          </div>
-          <div class="format-control" id="max-size-control">
-            <label>Max Size (px)</label>
-            <input type="number" id="fmt-max-size" min="10" max="200" value="100">
-          </div>
-          <div class="format-control" id="size-scale-control">
-            <label>Size Scale: <span id="scale-value">1.0x</span></label>
-            <input type="range" id="fmt-size-scale" min="0" max="100" step="1" value="50" style="width: 120px; margin-right: 10px;">
-          </div>
-        </div>
-
-        <hr class="format-divider">
-
-        <div class="format-section" id="line-section">
-          <div class="format-section-header">
-            <input type="checkbox" id="fmt-line-enabled" title="Enable custom line style for this rule" style="display: none;">
-            <h3 class="format-subheader">Connection Line</h3>
-          </div>
-          <div class="format-control">
-            <label>Color</label>
-            <input type="color" id="fmt-line-color" value="#000000">
-          </div>
-          <div class="format-control" id="line-hover-color-control">
-            <label>Hover Color</label>
-            <input type="color" id="fmt-line-hover-color" value="#FFD241">
-          </div>
-          <div class="format-control">
-            <label>Thickness</label>
-            <input type="number" id="fmt-line-thickness" value="3" min="0.5" max="10" step="0.5">
-          </div>
-          <div class="format-control" id="line-hover-thickness-control">
-            <label>Hover Thickness</label>
-            <input type="number" id="fmt-line-hover-thickness" value="5" min="0.5" max="10" step="0.5">
-          </div>
-        </div>
-
-        <hr class="format-divider" id="other-options-divider">
-
-        <div class="format-section" id="other-options-section">
-          <h3 class="format-subheader">Other Options</h3>
-          <div class="format-control">
-            <label>Background Color</label>
-            <input type="color" id="fmt-bg-color" value="#dadada">
-          </div>          
-          <br></br>
-          <div class="format-control">
-            <label>Is something missing??  Contact Matt!</label>
-          </div>
-          <br></br>
-        </div>
-        </div>
-      </div>
-    </aside>
-    
     <div id="graph-area">
       <canvas id="canvas"></canvas>
       
       <div id="logo">
         <img src="https://i.ibb.co/RXfZbS8/De-Smog-Logo-small.png" alt="Logo">
       </div>
+      
+      <button id="panel-toggle" title="Toggle Panel">▶</button>
       
       <div id="top-controls">
         <div id="zoom-controls">
@@ -944,9 +447,9 @@
         </div>
       </div>
 
-      <div id="loading-overlay" style="display: none;">
+      <div id="loading-overlay">
         <div class="spinner"></div>
-        <div id="loading-text">Processing...</div>
+        <div id="loading-text">Loading data...</div>
       </div>
     </div>
 
@@ -960,10 +463,25 @@
 
       <button id="clear-btn" style="margin-bottom: 8px; flex-shrink: 0;">Clear Selection</button>
 
+      <button id="story-btn">Start Story</button>
+
       <div id="suggestions"></div>
 
+      <div id="view-content">
+        <div class="view-progress" id="view-progress"></div>
+        <div class="view-title" id="view-title"></div>
+        <img class="view-image" id="view-image" style="display: none;" />
+        <div class="view-text" id="view-text"></div>
+      </div>
+
+      <div id="story-nav-container">
+        <button id="story-prev-btn" class="story-nav-btn">◀ Back</button>
+        <button id="story-next-btn" class="story-nav-btn">Next ▶</button>
+        <button id="story-exit-btn" class="story-nav-btn">Exit Story</button>
+      </div>
+
       <div id="node-info">
-        <div id="node-title">Select an entity to view details</div>
+        <div id="node-title">Select a node or start story</div>
         <div id="node-meta" class="muted" style="margin-top:6px;"></div>
       </div>
 
@@ -972,20 +490,17 @@
       <div id="connections-box"></div>
 
       <div id="msg"></div>
+
+      <!-- Entity Modal for Story Mode -->
+      <div id="entity-modal">
+        <button id="entity-modal-close">✕</button>
+        <div id="entity-modal-content">
+          <div id="entity-modal-title"></div>
+          <div id="entity-modal-connections"></div>
+        </div>
+      </div>
     </aside>
   </div>
-
-  <!-- Confirm Dialog -->
-  <div id="confirm-dialog">
-    <div class="confirm-box">
-      <div class="confirm-message" id="confirm-message">Are you sure?</div>
-      <div class="confirm-buttons">
-        <button class="confirm-btn confirm-no" id="confirm-no">Cancel</button>
-        <button class="confirm-btn confirm-yes" id="confirm-yes">Confirm</button>
-      </div>
-    </div>
-  </div>
-
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
@@ -1004,7 +519,7 @@
     labelOffsetY: 4,
     labelBoxOpacity: 0.6,
     gridSize: 25,
-    dragDelayMs: 600, // hold before drag
+    dragDelayMs: 600,
     force: {
       linkDistance: 30,
       linkStrength: 0.8,
@@ -1013,15 +528,17 @@
       velocityDecay: 0.1
     },
     showImages: true,
-    maxSuggestions: 25, //what is this?
+    maxSuggestions: 25,
     zoomMin: 0.2,
     zoomMax: 5.0,
-    zoomStep: 0.2
+    zoomStep: 0.2,
+    // DATA FOLDER - Change this path to point to your data folder
+    dataFolder: 'data/'
   };
 
   const PADDING = 80;
 
-  // Default Formatting Settings that can be customized by user
+  // Default Formatting Settings
   let formattingSettings = {
     nodeColor: '#000000',
     nodeHoverColor: '#FFD241',
@@ -1034,7 +551,7 @@
     lineThickness: 3,
     lineHoverThickness: 5,
     backgroundColor: '#E3E3E3',
-    nodeSizeMode: 'connections', // 'connections' or 'custom'
+    nodeSizeMode: 'connections',
     customNodeSize: 30,
     minNodeSize: 12,
     maxNodeSize: 80,
@@ -1044,6 +561,7 @@
   // Global state
   let nodes = [];
   let animationTime = 0;
+  let animationScheduled = false;
   let links = [];
   let nodeById = new Map();
   let adjacency = new Map();
@@ -1059,17 +577,24 @@
   let dragStartY = 0;
   let dragStartPanX = 0;
   let dragStartPanY = 0;
-  let hasUnsavedChanges = false;
   let mouseDownNode = null;
   let mouseDownTime = 0;
   let dragDelayTimer = null;
-  let animationScheduled = false;
-  let didDrag = false; // Track if actual dragging occurred
+  let didDrag = false;
 
   // Conditional Formatting State
-  let conditionalFormats = []; // Array of format rules: {type, name, order, targets, nodeColor, outlineColor, outlineThickness, nodeSize, lineColor, lineThickness}
-  let currentFormatRule = 'default'; // 'default' or index in conditionalFormats array
+  let conditionalFormats = [];
 
+  // STORY MODE STATE
+  let viewsData = [];
+  let viewsById = new Map();
+  let entityViewsMap = new Map();
+  let entityHighlightsMap = new Map(); // entity name -> Set of view IDs where it should be highlighted
+  let viewEntitiesCache = new Map();
+  let isStoryMode = false;
+  let currentViewIndex = 0;
+  let sortedViewIds = [];
+  let hasViewsColumn = false;
 
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d', { alpha: false });
@@ -1092,81 +617,23 @@
   const zoomInBtn = document.getElementById('zoom-in');
   const zoomOutBtn = document.getElementById('zoom-out');
   const zoomResetBtn = document.getElementById('zoom-reset');
-  const fileInputEntities = document.getElementById('file-input-entities');
-  const fileInputConnections = document.getElementById('file-input-connections');
-  const fileInputFormatting = document.getElementById('file-input-formatting');
-  const fileInputAddEntities = document.getElementById('file-input-add-entities');
-  const fileInputAddConnections = document.getElementById('file-input-add-connections');
-  const fileInputAddFormatting = document.getElementById('file-input-add-formatting');
-  const statusMsg = document.getElementById('status-msg');
-  const downloadBtn = document.getElementById('download-btn');
-  const confirmDialog = document.getElementById('confirm-dialog');
-  const confirmMessage = document.getElementById('confirm-message');
-  
-  // Inline rule editing elements
-  const formatRuleSelector = document.getElementById('format-rule-selector');
-  const ruleControls = document.getElementById('rule-controls');
-  const ruleUpBtn = document.getElementById('rule-up-btn');
-  const ruleDownBtn = document.getElementById('rule-down-btn');
-  const ruleDeleteBtn = document.getElementById('rule-delete-btn');
-  const ruleNameSection = document.getElementById('rule-name-section');
-  const ruleNameInput = document.getElementById('rule-name-input');
-  const ruleTargetsSection = document.getElementById('rule-targets-section');
-  const ruleTargetsLabel = document.getElementById('rule-targets-label');
-  const ruleTargetsSearch = document.getElementById('rule-targets-search');
-  const ruleTargetsList = document.getElementById('rule-targets-list');
-  const ruleSelectedTargets = document.getElementById('rule-selected-targets');
-  
-  // Tab and formatting elements
-  const entitiesTab = document.getElementById('entities-tab');
-  const formattingTab = document.getElementById('formatting-tab');
-  const entityTableContainer = document.getElementById('entity-table-container');
-  const formattingMenu = document.getElementById('formatting-menu');
-  const fmtNodeColor = document.getElementById('fmt-node-color');
-  const fmtNodeHoverColor = document.getElementById('fmt-node-hover-color');
-  const fmtLineColor = document.getElementById('fmt-line-color');
-  const fmtLineHoverColor = document.getElementById('fmt-line-hover-color');
-  const fmtLineThickness = document.getElementById('fmt-line-thickness');
-  const fmtLineHoverThickness = document.getElementById('fmt-line-hover-thickness');
-  const fmtOutlineColor = document.getElementById('fmt-outline-color');
-  const fmtOutlineHoverColor = document.getElementById('fmt-outline-hover-color');
-  const fmtOutlineThickness = document.getElementById('fmt-outline-thickness');
-  const fmtOutlineHoverThickness = document.getElementById('fmt-outline-hover-thickness');
-  const fmtBgColor = document.getElementById('fmt-bg-color');
-  const fmtSizeMode = document.getElementById('fmt-size-mode');
-  const fmtCustomSize = document.getElementById('fmt-custom-size');
-  const fmtMinSize = document.getElementById('fmt-min-size');
-  const fmtMaxSize = document.getElementById('fmt-max-size');
-  const fmtSizeScale = document.getElementById('fmt-size-scale');
-  const scaleValueDisplay = document.getElementById('scale-value');
-  const customSizeControl = document.getElementById('custom-size-control');
-  const customSizeCheckboxControl = document.getElementById("custom-size-checkbox-control");
-  const fmtCustomSizeEnabled = document.getElementById("fmt-custom-size-enabled");
-  
-  // Controls to hide for conditional rules
-  const sizeModeControl = document.getElementById('size-mode-control');
-  const minSizeControl = document.getElementById('min-size-control');
-  const maxSizeControl = document.getElementById('max-size-control');
-  const sizeScaleControl = document.getElementById('size-scale-control');
-  const otherOptionsSection = document.getElementById('other-options-section');
-  const otherOptionsDivider = document.getElementById('other-options-divider');
-  const nodeHoverColorControl = document.getElementById('node-hover-color-control');
-  const outlineHoverColorControl = document.getElementById('outline-hover-color-control');
-  const outlineHoverThicknessControl = document.getElementById('outline-hover-thickness-control');
-  const lineHoverColorControl = document.getElementById('line-hover-color-control');
-  const lineHoverThicknessControl = document.getElementById('line-hover-thickness-control');
 
-  // Section enable checkboxes (for conditional formatting rules)
-  const fmtNodeEnabled = document.getElementById('fmt-node-enabled');
-  const fmtOutlineEnabled = document.getElementById('fmt-outline-enabled');
-  const fmtSizeEnabled = document.getElementById('fmt-size-enabled');
-  const fmtLineEnabled = document.getElementById('fmt-line-enabled');
-  
-  // Section containers
-  const nodeSection = document.getElementById('node-section');
-  const outlineSection = document.getElementById('outline-section');
-  const sizeSection = document.getElementById('size-section');
-  const lineSection = document.getElementById('line-section');
+  // Story mode elements
+  const storyBtn = document.getElementById('story-btn');
+  const storyNavContainer = document.getElementById('story-nav-container');
+  const storyPrevBtn = document.getElementById('story-prev-btn');
+  const storyNextBtn = document.getElementById('story-next-btn');
+  const storyExitBtn = document.getElementById('story-exit-btn');
+  const viewContent = document.getElementById('view-content');
+  const viewProgress = document.getElementById('view-progress');
+  const viewTitle = document.getElementById('view-title');
+  const viewImage = document.getElementById('view-image');
+  const viewText = document.getElementById('view-text');
+  const nodeInfo = document.getElementById('node-info');
+  const entityModal = document.getElementById('entity-modal');
+  const entityModalClose = document.getElementById('entity-modal-close');
+  const entityModalTitle = d3.select('#entity-modal-title');
+  const entityModalConnections = document.getElementById('entity-modal-connections');
 
   /************************************************************************
    * CANVAS SETUP
@@ -1181,874 +648,97 @@
     ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
   }
   
+  // Debounce timer for resize
+  let resizeDebounceTimer = null;
+  
   window.addEventListener('resize', () => { 
     resizeCanvas(); 
+    
+    // Immediate rescale for responsiveness
+    if (nodes.length > 0 && originalDataBounds) {
+      scaleNodesToFit();
+    }
+    
     if (simulation && simulation.force) { 
       const c = simulation.force('center'); 
       if (c) {
-        c.x((canvas.width/devicePixelRatio)/2);
-        c.y((canvas.height/devicePixelRatio)/2);
+        c.x((canvas.width/(devicePixelRatio))/2);
+        c.y((canvas.height/(devicePixelRatio))/2);
       }
     } 
     render();
+    
+    // Debounced final adjustment
+    if (resizeDebounceTimer) clearTimeout(resizeDebounceTimer);
+    resizeDebounceTimer = setTimeout(() => {
+      if (nodes.length > 0 && originalDataBounds) {
+        scaleNodesToFit();
+        render();
+      }
+    }, 100);
   });
   
   resizeCanvas();
 
   /************************************************************************
-   * INITIALIZE FORMATTING CONTROLS
+   * NODE SIZING
    ************************************************************************/
-  function initializeFormattingControls() {
-    // Set all UI controls to match default formattingSettings
-    fmtNodeColor.value = formattingSettings.nodeColor;
-    fmtNodeHoverColor.value = formattingSettings.nodeHoverColor;
-    fmtLineColor.value = formattingSettings.lineColor;
-    fmtLineHoverColor.value = formattingSettings.lineHoverColor;
-    fmtLineThickness.value = formattingSettings.lineThickness;
-    fmtLineHoverThickness.value = formattingSettings.lineHoverThickness;
-    fmtOutlineColor.value = formattingSettings.outlineColor;
-    fmtOutlineHoverColor.value = formattingSettings.outlineHoverColor;
-    fmtOutlineThickness.value = formattingSettings.outlineThickness;
-    fmtOutlineHoverThickness.value = formattingSettings.outlineHoverThickness;
-    fmtBgColor.value = formattingSettings.backgroundColor;
-    fmtSizeMode.value = formattingSettings.nodeSizeMode;
-    fmtCustomSize.value = formattingSettings.customNodeSize;
-    fmtMinSize.value = formattingSettings.minNodeSize;
-    fmtMaxSize.value = formattingSettings.maxNodeSize;
+  function updateNodeSizes() {
+    if (nodes.length === 0) return;
     
-    // Set size scale slider to 50 (middle position = 1x)
-    fmtSizeScale.value = 50;
-    scaleValueDisplay.textContent = '1.0x';
+    const connectionCounts = nodes.map(n => (adjacency.get(n.id) || new Set()).size);
+    const maxConnections = Math.max(...connectionCounts, 1);
+    const minConnections = Math.min(...connectionCounts, 0);
     
-    // Hide custom size control if not in custom mode
-    if (formattingSettings.nodeSizeMode !== 'custom') {
-      customSizeControl.style.display = 'none';
-    }
-  }
-  
-  // Initialize controls on page load
-  initializeFormattingControls();
-
-  /************************************************************************
-   * AUTO-LOAD CSVs FROM FOLDER
-   ************************************************************************/
-  async function autoLoadCSVs() {
-    try {
-      // Try to fetch the CSVs from the same folder as the HTML file
-      const entitiesPromise = fetch('Entities.csv');
-      const connectionsPromise = fetch('Connections.csv');
-      const formattingPromise = fetch('Formatting.csv');
+    nodes.forEach(n => {
+      const conns = (adjacency.get(n.id) || new Set()).size;
       
-      const [entitiesResponse, connectionsResponse, formattingResponse] = await Promise.all([
-        entitiesPromise.catch(() => null),
-        connectionsPromise.catch(() => null),
-        formattingPromise.catch(() => null)
-      ]);
-      
-      // Check if at least Entities and Connections exist
-      if (!entitiesResponse || !entitiesResponse.ok || !connectionsResponse || !connectionsResponse.ok) {
-        console.log('Default CSVs not found in folder. Please upload files manually.');
-        return;
-      }
-      
-      loadingOverlay.style.display = 'flex';
-      loadingText.textContent = 'Loading default CSVs...';
-      
-      // Parse the CSV text
-      const entitiesText = await entitiesResponse.text();
-      const connectionsText = await connectionsResponse.text();
-      const formattingText = formattingResponse && formattingResponse.ok ? await formattingResponse.text() : null;
-      
-      // Parse with PapaParse
-      const entitiesData = await new Promise((resolve, reject) => {
-        Papa.parse(entitiesText, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => resolve(results.data),
-          error: (error) => reject(error)
-        });
-      });
-      
-      const connectionsData = await new Promise((resolve, reject) => {
-        Papa.parse(connectionsText, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => resolve(results.data),
-          error: (error) => reject(error)
-        });
-      });
-      
-      let formattingData = null;
-      if (formattingText) {
-        formattingData = await new Promise((resolve, reject) => {
-          Papa.parse(formattingText, {
-            header: true,
-            skipEmptyLines: true,
-            complete: (results) => resolve(results.data),
-            error: (error) => reject(error)
-          });
-        });
-        
-        if (formattingData && formattingData.length > 0) {
-          loadFormattingData(formattingData);
-        }
-      }
-      
-      // Load the data
-      loadSession(entitiesData, connectionsData);
-      showStatus(`Loaded ${nodes.length} entities and ${links.length} connections`, 'success');
-      hasUnsavedChanges = false;
-      updateDownloadButton();
-      
-    } catch (err) {
-      console.log('Could not auto-load CSVs:', err.message);
-      // Silently fail - user can upload manually
-    }
-  }
-  
-  // Attempt to auto-load CSVs on page load
-  autoLoadCSVs();
-
-  /************************************************************************
-   * TAB SWITCHING
-   ************************************************************************/
-  entitiesTab.addEventListener('click', () => {
-    entitiesTab.classList.add('active');
-    formattingTab.classList.remove('active');
-    entityTableContainer.style.display = 'flex';
-    formattingMenu.style.display = 'none';
-  });
-  
-  formattingTab.addEventListener('click', () => {
-    formattingTab.classList.add('active');
-    entitiesTab.classList.remove('active');
-    entityTableContainer.style.display = 'none';
-    formattingMenu.style.display = 'flex';
-  });
-
-  /************************************************************************
-   * FORMATTING CONTROLS
-   ************************************************************************/
-  fmtNodeColor.addEventListener('input', (e) => {
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].nodeColor = e.target.value;
-      invalidateFormatCache();
-    } else {
-      formattingSettings.nodeColor = e.target.value;
-    }
-    render();
-  });
-
-  fmtNodeHoverColor.addEventListener('input', (e) => {
-    formattingSettings.nodeHoverColor = e.target.value;
-    render();
-  });
-
-  fmtLineColor.addEventListener('input', (e) => {
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].lineColor = e.target.value;
-      invalidateFormatCache();
-    } else {
-      formattingSettings.lineColor = e.target.value;
-    }
-    render();
-  });
-
-  fmtLineHoverColor.addEventListener('input', (e) => {
-    formattingSettings.lineHoverColor = e.target.value;
-    render();
-  });
-  
-  fmtLineThickness.addEventListener('input', (e) => {
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].lineThickness = parseFloat(e.target.value);
-      invalidateFormatCache();
-    } else {
-      formattingSettings.lineThickness = parseFloat(e.target.value);
-    }
-    render();
-  });
-
-  fmtLineHoverThickness.addEventListener('input', (e) => {
-    formattingSettings.lineHoverThickness = parseFloat(e.target.value);
-    render();
-  });
-  
-  fmtOutlineColor.addEventListener('input', (e) => {
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].outlineColor = e.target.value;
-      invalidateFormatCache();
-    } else if (!isCreatingNewRule) {
-      // Only update default if not creating a new rule
-      formattingSettings.outlineColor = e.target.value;
-    }
-    render();
-  });
-
-  fmtOutlineHoverColor.addEventListener('input', (e) => {
-    formattingSettings.outlineHoverColor = e.target.value;
-    render();
-  });
-  
-  fmtOutlineThickness.addEventListener('input', (e) => {
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].outlineThickness = parseFloat(e.target.value);
-      invalidateFormatCache();
-    } else {
-      formattingSettings.outlineThickness = parseFloat(e.target.value);
-    }
-    render();
-  });
-
-  fmtOutlineHoverThickness.addEventListener('input', (e) => {
-    formattingSettings.outlineHoverThickness = parseFloat(e.target.value);
-    render();
-  });
-  
-  fmtBgColor.addEventListener('input', (e) => {
-    formattingSettings.backgroundColor = e.target.value;
-    document.documentElement.style.setProperty('--bg-white', e.target.value);
-    render();
-  });
-
-  fmtSizeMode.addEventListener('change', (e) => {
-    formattingSettings.nodeSizeMode = e.target.value;
-    if (e.target.value === 'custom') {
-      customSizeControl.style.display = 'flex';
-    } else {
-      customSizeControl.style.display = 'none';
-    }
-    updateNodeSizes();
-    schedulePhysicsRestart();
-    render();
-  });
-
-  fmtCustomSize.addEventListener('input', (e) => {
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].nodeSize = parseFloat(e.target.value);
-      // Ensure sizeEnabled is also true
-      if (!conditionalFormats[currentEditingRuleIndex].sizeEnabled) {
-        conditionalFormats[currentEditingRuleIndex].sizeEnabled = true;
-        fmtSizeEnabled.checked = true;
-        updateSectionState(sizeSection, true);
-      }
-      invalidateFormatCache();
-      applyNodeSizeScale();
-      schedulePhysicsRestart();
-    } else {
-      formattingSettings.customNodeSize = parseFloat(e.target.value);
       if (formattingSettings.nodeSizeMode === 'custom') {
-        updateNodeSizes();
-        schedulePhysicsRestart();
+        n.baseR = formattingSettings.customNodeSize;
+      } else {
+        const normalized = maxConnections > minConnections 
+          ? (conns - minConnections) / (maxConnections - minConnections)
+          : 0.5;
+        
+        n.baseR = formattingSettings.minNodeSize + normalized * (formattingSettings.maxNodeSize - formattingSettings.minNodeSize);
       }
-    }
-    render();
-  });
-
-  fmtMinSize.addEventListener('input', (e) => {
-    formattingSettings.minNodeSize = parseFloat(e.target.value);
-    updateNodeSizes();
-    schedulePhysicsRestart();
-    render();
-  });
-
-  fmtMaxSize.addEventListener('input', (e) => {
-    formattingSettings.maxNodeSize = parseFloat(e.target.value);
-    updateNodeSizes();
-    schedulePhysicsRestart();
-    render();
-  });
-
-  fmtSizeScale.addEventListener('input', (e) => {
-    const sliderValue = parseFloat(e.target.value);
-    let scale;
+      n.r = n.baseR;
+    });
     
-    // Map slider value (0-100) to scale (0.1x-10x) with 50=1x
-    if (sliderValue <= 50) {
-      // 0-50 maps to 0.1x-1x (linear)
-      scale = 0.1 + (sliderValue / 50) * 0.9;
-    } else {
-      // 50-100 maps to 1x-10x (linear)
-      scale = 1.0 + ((sliderValue - 50) / 50) * 9.0;
-    }
-    
-    formattingSettings.sizeScale = scale;
-    scaleValueDisplay.textContent = scale.toFixed(1) + 'x';
     applyNodeSizeScale();
-    schedulePhysicsRestart();
-    render();
-  });
+  }
+  
+  function applyNodeSizeScale() {
+    const scale = formattingSettings.sizeScale;
+    nodes.forEach(n => {
+      const format = getNodeFormat(n);
+      if (format?.sizeEnabled && format?.nodeSize) {
+        n.r = (format.nodeSize * scale) / 2;
+      } else {
+        n.r = (n.baseR || 15) * scale;
+      }
+    });
+  }
 
   /************************************************************************
    * CONDITIONAL FORMATTING
    ************************************************************************/
-  let currentEditingRuleIndex = null;
-  let selectedTargetsSet = new Set();
-  let currentRuleType = null;
-  let isCreatingNewRule = false;
-
-  // Section enable checkbox event listeners
-  function updateSectionState(section, enabled) {
-    if (enabled) {
-      section.classList.remove('disabled');
-    } else {
-      section.classList.add('disabled');
-    }
-  }
-
-  fmtNodeEnabled.addEventListener('change', () => {
-    updateSectionState(nodeSection, fmtNodeEnabled.checked);
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].nodeEnabled = fmtNodeEnabled.checked;
-      invalidateFormatCache();
-      render();
-    }
-  });
-
-  fmtOutlineEnabled.addEventListener('change', () => {
-    updateSectionState(outlineSection, fmtOutlineEnabled.checked);
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].outlineEnabled = fmtOutlineEnabled.checked;
-      invalidateFormatCache();
-      render();
-    }
-  });
-
-  fmtSizeEnabled.addEventListener('change', () => {
-    updateSectionState(sizeSection, fmtSizeEnabled.checked);
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].sizeEnabled = fmtSizeEnabled.checked;
-      // If disabling the section, also disable custom size
-      if (!fmtSizeEnabled.checked) {
-        fmtCustomSizeEnabled.checked = false;
-        customSizeControl.style.display = 'none';
-        conditionalFormats[currentEditingRuleIndex].nodeSize = null;
-      }
-      invalidateFormatCache();
-      applyNodeSizeScale();
-      schedulePhysicsRestart();
-      render();
-    }
-  });
-
-  fmtLineEnabled.addEventListener('change', () => {
-    updateSectionState(lineSection, fmtLineEnabled.checked);
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].lineEnabled = fmtLineEnabled.checked;
-      invalidateFormatCache();
-      render();
-    }
-  });
-
-  // Handle format rule selector dropdown
-  formatRuleSelector.addEventListener('change', (e) => {
-    const value = e.target.value;
-    
-    if (value === 'create-entity' || value === 'create-category') {
-      // Start creating a new rule
-      isCreatingNewRule = true;
-      currentRuleType = value === 'create-entity' ? 'entity' : 'category';
-      currentEditingRuleIndex = null;
-      selectedTargetsSet.clear();
-      
-      // Show rule creation interface
-      showRuleEditInterface(currentRuleType, null);
-      
-    } else {
-      // Loading existing rule or default
-      isCreatingNewRule = false;
-      currentFormatRule = value;
-      loadFormatRule(value);
-    }
-  });
-
-  function showRuleEditInterface(type, ruleIndex) {
-    // Show name and targets sections
-    ruleNameSection.style.display = 'block';
-    ruleTargetsSection.style.display = 'block';
-    
-    // Hide default-only controls for conditional rules
-    sizeModeControl.style.display = 'none';
-    minSizeControl.style.display = 'none';
-    maxSizeControl.style.display = 'none';
-    sizeScaleControl.style.display = 'none';
-    otherOptionsSection.style.display = 'none';
-    otherOptionsDivider.style.display = 'none';
-    
-    // Hide hover controls (only for default formatting)
-    nodeHoverColorControl.style.display = 'none';
-    outlineHoverColorControl.style.display = 'none';
-    outlineHoverThicknessControl.style.display = 'none';
-    lineHoverColorControl.style.display = 'none';
-    lineHoverThicknessControl.style.display = 'none';
-    
-    // Show section enable checkboxes for conditional rules
-    fmtNodeEnabled.style.display = 'inline-block';
-    fmtOutlineEnabled.style.display = 'inline-block';
-    fmtSizeEnabled.style.display = 'inline-block';
-    fmtLineEnabled.style.display = 'inline-block';
-    
-    // Show custom size checkbox control for conditional rules
-    customSizeCheckboxControl.style.display = 'flex';
-    
-    // Set targets label
-    ruleTargetsLabel.textContent = type === 'entity' ? 'ENTITIES' : 'CATEGORIES';
-    
-    // Load rule data if editing
-    if (ruleIndex !== null) {
-      const rule = conditionalFormats[ruleIndex];
-      ruleNameInput.value = rule.name;
-      selectedTargetsSet = new Set(rule.targets);
-      
-      // Show rule controls
-      ruleControls.style.display = 'flex';
-      ruleUpBtn.disabled = ruleIndex === 0;
-      ruleDownBtn.disabled = ruleIndex === conditionalFormats.length - 1;
-      
-      // Enable all formatting controls since rule exists
-      enableFormattingControls();
-      
-      // Set section enable checkboxes based on rule
-      fmtNodeEnabled.checked = rule.nodeEnabled || false;
-      fmtOutlineEnabled.checked = rule.outlineEnabled || false;
-      fmtSizeEnabled.checked = rule.sizeEnabled || false;
-      fmtLineEnabled.checked = rule.lineEnabled || false;
-      
-      // Update section states based on checkboxes
-      updateSectionState(nodeSection, fmtNodeEnabled.checked);
-      updateSectionState(outlineSection, fmtOutlineEnabled.checked);
-      updateSectionState(sizeSection, fmtSizeEnabled.checked);
-      updateSectionState(lineSection, fmtLineEnabled.checked);
-      
-      // Set custom size checkbox and value based on whether nodeSize exists
-      if (rule.nodeSize !== null && rule.nodeSize !== undefined) {
-        fmtCustomSizeEnabled.checked = true;
-        customSizeControl.style.display = 'flex';
-        fmtCustomSize.value = rule.nodeSize;
-        // If nodeSize exists, sizeEnabled should also be true
-        if (!rule.sizeEnabled) {
-          rule.sizeEnabled = true;
-          fmtSizeEnabled.checked = true;
-          updateSectionState(sizeSection, true);
-        }
-      } else {
-        fmtCustomSizeEnabled.checked = false;
-        customSizeControl.style.display = 'none';
-      }
-    } else {
-      // New rule - disable controls until name is entered
-      ruleNameInput.value = '';
-      selectedTargetsSet.clear();
-      ruleControls.style.display = 'none';
-      
-      // Default all section checkboxes to OFF (unchecked)
-      fmtNodeEnabled.checked = false;
-      fmtOutlineEnabled.checked = false;
-      fmtSizeEnabled.checked = false;
-      fmtLineEnabled.checked = false;
-      
-      // Default custom size checkbox to OFF and hide size input
-      fmtCustomSizeEnabled.checked = false;
-      customSizeControl.style.display = 'none';
-      
-      // Set all sections to disabled state
-      updateSectionState(nodeSection, false);
-      updateSectionState(outlineSection, false);
-      updateSectionState(sizeSection, false);
-      updateSectionState(lineSection, false);
-      
-      // Disable all formatting controls until rule name is entered
-      disableFormattingControls();
-    }
-    
-    updateTargetsList();
-    updateSelectedTargets();
-    
-    // Focus on name input
-    setTimeout(() => ruleNameInput.focus(), 100);
-  }
-
-  function hideRuleEditInterface() {
-    ruleNameSection.style.display = 'none';
-    ruleTargetsSection.style.display = 'none';
-    ruleControls.style.display = 'none';
-    customSizeCheckboxControl.style.display = 'none';
-    customSizeControl.style.display = 'none';
-    
-    // Hide section enable checkboxes (only shown for conditional rules)
-    fmtNodeEnabled.style.display = 'none';
-    fmtOutlineEnabled.style.display = 'none';
-    fmtSizeEnabled.style.display = 'none';
-    fmtLineEnabled.style.display = 'none';
-    
-    // Reset all sections to enabled state (for default formatting)
-    nodeSection.classList.remove('disabled');
-    outlineSection.classList.remove('disabled');
-    sizeSection.classList.remove('disabled');
-    lineSection.classList.remove('disabled');
-    
-    // Show hover controls (for default formatting)
-    nodeHoverColorControl.style.display = 'flex';
-    outlineHoverColorControl.style.display = 'flex';
-    outlineHoverThicknessControl.style.display = 'flex';
-    lineHoverColorControl.style.display = 'flex';
-    lineHoverThicknessControl.style.display = 'flex';
-  }
-
-  function disableFormattingControls() {
-    // Disable all formatting controls and make them look faded
-    fmtNodeColor.disabled = true;
-    fmtOutlineColor.disabled = true;
-    fmtOutlineThickness.disabled = true;
-    fmtLineColor.disabled = true;
-    fmtLineThickness.disabled = true;
-    fmtCustomSizeEnabled.disabled = true;
-    fmtCustomSize.disabled = true;
-    
-    // Add faded appearance
-    fmtNodeColor.style.opacity = '0.5';
-    fmtOutlineColor.style.opacity = '0.5';
-    fmtOutlineThickness.style.opacity = '0.5';
-    fmtLineColor.style.opacity = '0.5';
-    fmtLineThickness.style.opacity = '0.5';
-    fmtCustomSizeEnabled.style.opacity = '0.5';
-    fmtCustomSize.style.opacity = '0.5';
-  }
-
-  function enableFormattingControls() {
-    // Enable all formatting controls
-    fmtNodeColor.disabled = false;
-    fmtOutlineColor.disabled = false;
-    fmtOutlineThickness.disabled = false;
-    fmtLineColor.disabled = false;
-    fmtLineThickness.disabled = false;
-    fmtCustomSizeEnabled.disabled = false;
-    fmtCustomSize.disabled = false;
-    
-    // Remove faded appearance
-    fmtNodeColor.style.opacity = '1';
-    fmtOutlineColor.style.opacity = '1';
-    fmtOutlineThickness.style.opacity = '1';
-    fmtLineColor.style.opacity = '1';
-    fmtLineThickness.style.opacity = '1';
-    fmtCustomSizeEnabled.style.opacity = '1';
-    fmtCustomSize.style.opacity = '1';
-  }
-
-  // Auto-save when rule name changes
-  ruleNameInput.addEventListener('input', () => {
-    const ruleName = ruleNameInput.value.trim();
-    
-    // Enable formatting controls once user enters a name
-    if (ruleName) {
-      enableFormattingControls();
-    } else {
-      disableFormattingControls();
-      return;
-    }
-    
-    if (isCreatingNewRule && ruleName) {
-      // Create the rule immediately with current control values
-      // All sections default to OFF (disabled)
-      const newRule = {
-        type: currentRuleType,
-        name: ruleName,
-        order: conditionalFormats.length,
-        targets: Array.from(selectedTargetsSet),
-        nodeEnabled: fmtNodeEnabled.checked,
-        nodeColor: fmtNodeColor.value,
-        outlineEnabled: fmtOutlineEnabled.checked,
-        outlineColor: fmtOutlineColor.value,
-        outlineThickness: parseFloat(fmtOutlineThickness.value),
-        sizeEnabled: fmtSizeEnabled.checked,
-        nodeSize: fmtCustomSizeEnabled.checked ? (parseFloat(fmtCustomSize.value) || 20) : null,
-        lineEnabled: fmtLineEnabled.checked,
-        lineColor: fmtLineColor.value,
-        lineThickness: parseFloat(fmtLineThickness.value)
-      };
-      
-      conditionalFormats.push(newRule);
-      currentEditingRuleIndex = conditionalFormats.length - 1;
-      isCreatingNewRule = false;
-      
-      updateFormatRuleSelector();
-      currentFormatRule = currentEditingRuleIndex.toString();
-      formatRuleSelector.value = currentFormatRule;
-      
-      // Show rule controls now
-      ruleControls.style.display = 'flex';
-      ruleUpBtn.disabled = currentEditingRuleIndex === 0;
-      ruleDownBtn.disabled = currentEditingRuleIndex === conditionalFormats.length - 1;
-      
-      invalidateFormatCache();
-      applyNodeSizeScale();
-      render();
-    } else if (currentEditingRuleIndex !== null) {
-      // Update existing rule name
-      conditionalFormats[currentEditingRuleIndex].name = ruleName;
-      updateFormatRuleSelector();
-      formatRuleSelector.value = currentEditingRuleIndex.toString();
-    }
-  });
-
-  function updateTargetsList() {
-    const searchTerm = ruleTargetsSearch.value.toLowerCase();
-    ruleTargetsList.innerHTML = '';
-    
-    // Get unique entities or categories
-    const items = new Set();
-    nodes.forEach(node => {
-      if (currentRuleType === 'entity') {
-        items.add(node.name);
-      } else {
-        const category = (node.raw && (node.raw['Category'] || '')) || '';
-        if (category) items.add(category);
-      }
-    });
-    
-    const sorted = Array.from(items).sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}));
-    const filtered = searchTerm ? sorted.filter(item => item.toLowerCase().includes(searchTerm)) : sorted;
-    
-    filtered.forEach(item => {
-      const div = document.createElement('div');
-      div.style.cssText = 'padding: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px;';
-      
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.checked = selectedTargetsSet.has(item);
-      checkbox.addEventListener('change', () => {
-        if (checkbox.checked) {
-          selectedTargetsSet.add(item);
-        } else {
-          selectedTargetsSet.delete(item);
-        }
-        updateSelectedTargets();
-        saveTargetsToRule();
-      });
-      
-      const label = document.createElement('span');
-      label.textContent = item;
-      label.style.cssText = 'flex: 1; font-family: var(--font-family);';
-      label.addEventListener('click', () => {
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event('change'));
-      });
-      
-      div.appendChild(checkbox);
-      div.appendChild(label);
-      div.addEventListener('mouseenter', () => {
-        div.style.background = 'var(--light-yellow)';
-      });
-      div.addEventListener('mouseleave', () => {
-        div.style.background = 'transparent';
-      });
-      
-      ruleTargetsList.appendChild(div);
-    });
-    
-    if (filtered.length === 0) {
-      ruleTargetsList.innerHTML = '<div style="padding: 12px; text-align: center; color: var(--shadow-grey); font-family: var(--font-family);">No items found</div>';
-    }
-  }
-
-  function updateSelectedTargets() {
-    ruleSelectedTargets.innerHTML = '';
-    
-    selectedTargetsSet.forEach(target => {
-      const tag = document.createElement('div');
-      tag.style.cssText = 'display: inline-flex; align-items: center; gap: 6px; background: var(--shadow-grey); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-family: var(--font-family);';
-      
-      const text = document.createElement('span');
-      text.textContent = target;
-      
-      const remove = document.createElement('span');
-      remove.textContent = '×';
-      remove.style.cssText = 'cursor: pointer; font-size: 16px; font-weight: bold;';
-      remove.addEventListener('click', () => {
-        selectedTargetsSet.delete(target);
-        updateTargetsList();
-        updateSelectedTargets();
-        saveTargetsToRule();
-      });
-      
-      tag.appendChild(text);
-      tag.appendChild(remove);
-      ruleSelectedTargets.appendChild(tag);
-    });
-  }
-
-  function saveTargetsToRule() {
-    if (currentEditingRuleIndex !== null) {
-      conditionalFormats[currentEditingRuleIndex].targets = Array.from(selectedTargetsSet);
-      invalidateFormatCache();
-      applyNodeSizeScale();
-      render();
-    }
-  }
-
-  ruleTargetsSearch.addEventListener('input', updateTargetsList);
-
-  // Custom size checkbox event listener
-  fmtCustomSizeEnabled.addEventListener('change', () => {
-    if (fmtCustomSizeEnabled.checked) {
-      customSizeControl.style.display = 'flex';
-      if (currentEditingRuleIndex !== null) {
-        // Also enable the NODE SIZE section if not already enabled
-        if (!fmtSizeEnabled.checked) {
-          fmtSizeEnabled.checked = true;
-          updateSectionState(sizeSection, true);
-          conditionalFormats[currentEditingRuleIndex].sizeEnabled = true;
-        }
-        conditionalFormats[currentEditingRuleIndex].nodeSize = parseFloat(fmtCustomSize.value) || 20;
-        invalidateFormatCache();
-        applyNodeSizeScale();
-        render();
-      }
-    } else {
-      customSizeControl.style.display = 'none';
-      if (currentEditingRuleIndex !== null) {
-        conditionalFormats[currentEditingRuleIndex].nodeSize = null;
-        invalidateFormatCache();
-        applyNodeSizeScale();
-        render();
-      }
-    }
-  });
-
-  function loadFormatRule(ruleIdentifier) {
-    if (ruleIdentifier === 'default') {
-      // Hide all rule editing UI
-      hideRuleEditInterface();
-      
-      // Show default-only controls
-      sizeModeControl.style.display = 'flex';
-      minSizeControl.style.display = 'flex';
-      maxSizeControl.style.display = 'flex';
-      sizeScaleControl.style.display = 'flex';
-      otherOptionsSection.style.display = 'block';
-      otherOptionsDivider.style.display = 'block';
-      nodeHoverColorControl.style.display = 'flex';
-      outlineHoverColorControl.style.display = 'flex';
-      outlineHoverThicknessControl.style.display = 'flex';
-      lineHoverColorControl.style.display = 'flex';
-      lineHoverThicknessControl.style.display = 'flex';
-      
-      // Restore custom size control visibility based on current size mode
-      if (formattingSettings.nodeSizeMode === 'custom') {
-        customSizeControl.style.display = 'flex';
-        fmtCustomSize.value = formattingSettings.customNodeSize;
-      }
-      fmtSizeMode.value = formattingSettings.nodeSizeMode;
-      
-      // Load default formatting settings into controls
-      fmtNodeColor.value = formattingSettings.nodeColor;
-      fmtNodeHoverColor.value = formattingSettings.nodeHoverColor;
-      fmtOutlineColor.value = formattingSettings.outlineColor;
-      fmtOutlineHoverColor.value = formattingSettings.outlineHoverColor;
-      fmtOutlineThickness.value = formattingSettings.outlineThickness;
-      fmtOutlineHoverThickness.value = formattingSettings.outlineHoverThickness;
-      fmtLineColor.value = formattingSettings.lineColor;
-      fmtLineHoverColor.value = formattingSettings.lineHoverColor;
-      fmtLineThickness.value = formattingSettings.lineThickness;
-      fmtLineHoverThickness.value = formattingSettings.lineHoverThickness;
-      
-      currentEditingRuleIndex = null;
-      currentRuleType = null;
-    } else {
-      const ruleIndex = parseInt(ruleIdentifier);
-      const rule = conditionalFormats[ruleIndex];
-      
-      if (rule) {
-        currentEditingRuleIndex = ruleIndex;
-        currentRuleType = rule.type;
-        isCreatingNewRule = false;
-        
-        // Hide default-only controls
-        sizeModeControl.style.display = 'none';
-        minSizeControl.style.display = 'none';
-        maxSizeControl.style.display = 'none';
-        sizeScaleControl.style.display = 'none';
-        otherOptionsSection.style.display = 'none';
-        otherOptionsDivider.style.display = 'none';
-        nodeHoverColorControl.style.display = 'none';
-        outlineHoverColorControl.style.display = 'none';
-        outlineHoverThicknessControl.style.display = 'none';
-        lineHoverColorControl.style.display = 'none';
-        lineHoverThicknessControl.style.display = 'none';
-        
-        // Show rule edit interface (handles section checkboxes)
-        showRuleEditInterface(rule.type, ruleIndex);
-        
-        // Load rule values into formatting controls
-        fmtNodeColor.value = rule.nodeColor || formattingSettings.nodeColor;
-        fmtOutlineColor.value = rule.outlineColor || formattingSettings.outlineColor;
-        fmtOutlineThickness.value = rule.outlineThickness || formattingSettings.outlineThickness;
-        // nodeSize is already handled by showRuleEditInterface
-        fmtLineColor.value = rule.lineColor || formattingSettings.lineColor;
-        fmtLineThickness.value = rule.lineThickness || formattingSettings.lineThickness;
-      }
-    }
-  }
-
-  function updateFormatRuleSelector() {
-    // Save current selection
-    const currentSelection = formatRuleSelector.value;
-    
-    // Clear existing options except default and create buttons
-    formatRuleSelector.innerHTML = '<option value="default">DEFAULT FORMAT</option>';
-    
-    // Add existing rules
-    conditionalFormats.forEach((rule, index) => {
-      const option = document.createElement('option');
-      option.value = index;
-      option.textContent = `${rule.type === 'entity' ? 'Entity' : 'Category'}: ${rule.name}`;
-      formatRuleSelector.appendChild(option);
-    });
-    
-    // Add separator
-    const separator = document.createElement('optgroup');
-    separator.label = '───────────────';
-    separator.disabled = true;
-    formatRuleSelector.appendChild(separator);
-    
-    // Add create buttons
-    const createEntity = document.createElement('option');
-    createEntity.value = 'create-entity';
-    createEntity.textContent = '+ Create a new Entity rule';
-    formatRuleSelector.appendChild(createEntity);
-    
-    const createCategory = document.createElement('option');
-    createCategory.value = 'create-category';
-    createCategory.textContent = '+ Create a new Category rule';
-    formatRuleSelector.appendChild(createCategory);
-    
-    // Restore selection if still valid
-    if (currentSelection !== 'create-entity' && currentSelection !== 'create-category') {
-      formatRuleSelector.value = currentSelection;
-    }
-  }
-
   function invalidateFormatCache() {
-    // Clear cached formatting on nodes
-    nodes.forEach(node => {
-      delete node._cachedFormat;
-    });
-    links.forEach(link => {
-      delete link._cachedFormat;
-    });
+    nodes.forEach(n => { n._cachedFormat = undefined; });
+    links.forEach(l => { l._cachedFormat = undefined; });
   }
 
   function getNodeFormat(node) {
-    if (node._cachedFormat) return node._cachedFormat;
+    if (node._cachedFormat !== undefined) return node._cachedFormat;
     
-    // Check conditional formats in order
     for (const rule of conditionalFormats) {
-      if (rule.type === 'entity' && rule.targets.includes(node.name)) {
-        node._cachedFormat = rule;
-        return rule;
-      }
-      if (rule.type === 'category') {
-        const category = (node.raw && (node.raw['Category'] || '')) || '';
+      if (rule.type === 'entity') {
+        if (rule.targets.includes(node.id)) {
+          node._cachedFormat = rule;
+          return rule;
+        }
+      } else if (rule.type === 'category') {
+        const category = node.raw && node.raw['Category'];
         if (rule.targets.includes(category)) {
           node._cachedFormat = rule;
           return rule;
@@ -2063,11 +753,9 @@
   function getLinkFormat(link) {
     if (link._cachedFormat) return link._cachedFormat;
     
-    // Check if either endpoint has conditional formatting
     const sourceFormat = getNodeFormat(link.source);
     const targetFormat = getNodeFormat(link.target);
     
-    // Use the higher precedence format (earlier in array)
     if (sourceFormat && targetFormat) {
       const sourceIndex = conditionalFormats.indexOf(sourceFormat);
       const targetIndex = conditionalFormats.indexOf(targetFormat);
@@ -2083,390 +771,178 @@
     return link._cachedFormat;
   }
 
-  // Rule management button handlers
-  ruleUpBtn.addEventListener('click', () => {
-    if (currentEditingRuleIndex !== null && currentEditingRuleIndex > 0) {
-      // Swap with previous rule
-      [conditionalFormats[currentEditingRuleIndex], conditionalFormats[currentEditingRuleIndex - 1]] = 
-      [conditionalFormats[currentEditingRuleIndex - 1], conditionalFormats[currentEditingRuleIndex]];
-      
-      // Update orders
-      conditionalFormats.forEach((rule, idx) => rule.order = idx);
-      
-      // Update UI
-      currentEditingRuleIndex = currentEditingRuleIndex - 1;
-      updateFormatRuleSelector();
-      currentFormatRule = currentEditingRuleIndex.toString();
-      formatRuleSelector.value = currentFormatRule;
-      loadFormatRule(currentFormatRule);
-      invalidateFormatCache();
-      applyNodeSizeScale();
-      render();
-    }
-  });
-
-  ruleDownBtn.addEventListener('click', () => {
-    if (currentEditingRuleIndex !== null && currentEditingRuleIndex < conditionalFormats.length - 1) {
-      // Swap with next rule
-      [conditionalFormats[currentEditingRuleIndex], conditionalFormats[currentEditingRuleIndex + 1]] = 
-      [conditionalFormats[currentEditingRuleIndex + 1], conditionalFormats[currentEditingRuleIndex]];
-      
-      // Update orders
-      conditionalFormats.forEach((rule, idx) => rule.order = idx);
-      
-      // Update UI
-      currentEditingRuleIndex = currentEditingRuleIndex + 1;
-      updateFormatRuleSelector();
-      currentFormatRule = currentEditingRuleIndex.toString();
-      formatRuleSelector.value = currentFormatRule;
-      loadFormatRule(currentFormatRule);
-      invalidateFormatCache();
-      applyNodeSizeScale();
-      render();
-    }
-  });
-
-  ruleDeleteBtn.addEventListener('click', () => {
-    if (currentEditingRuleIndex !== null) {
-      const rule = conditionalFormats[currentEditingRuleIndex];
-      
-      if (rule) {
-        // Show confirmation dialog
-        showConfirmDialog(`Delete rule "${rule.name}"?`, () => {
-          // Remove the rule
-          conditionalFormats.splice(currentEditingRuleIndex, 1);
-          
-          // Update orders
-          conditionalFormats.forEach((r, idx) => r.order = idx);
-          
-          // Switch to default
-          currentFormatRule = 'default';
-          currentEditingRuleIndex = null;
-          formatRuleSelector.value = 'default';
-          
-          // Update UI
-          updateFormatRuleSelector();
-          loadFormatRule('default');
-          invalidateFormatCache();
-          applyNodeSizeScale();
-          render();
-        });
-      }
-    }
-  });
-
   /************************************************************************
-   * FILE UPLOAD STATE TRACKING
+   * AUTO-LOAD DATA FROM FOLDER
    ************************************************************************/
-  let pendingFiles = {
-    entities: null,
-    connections: null,
-    formatting: null
-  };
-  
-  let pendingAddFiles = {
-    entities: null,
-    connections: null,
-    formatting: null
-  };
-
-  /************************************************************************
-   * FILE UPLOAD - REPLACE (Individual Files)
-   ************************************************************************/
-  fileInputEntities.addEventListener('change', async (e) => {
-    if (e.target.files[0]) {
-      pendingFiles.entities = e.target.files[0];
-      await processUpload(false);
-    }
-    fileInputEntities.value = '';
-  });
-
-  fileInputConnections.addEventListener('change', async (e) => {
-    if (e.target.files[0]) {
-      pendingFiles.connections = e.target.files[0];
-      await processUpload(false);
-    }
-    fileInputConnections.value = '';
-  });
-
-  fileInputFormatting.addEventListener('change', async (e) => {
-    if (e.target.files[0]) {
-      pendingFiles.formatting = e.target.files[0];
-      // If entities and connections were already processed, load formatting immediately
-      if (!pendingFiles.entities && !pendingFiles.connections && nodes.length > 0) {
-        await loadFormattingFileOnly(pendingFiles.formatting);
-        pendingFiles.formatting = null;
-      } else {
-        await processUpload(false);
-      }
-    }
-    fileInputFormatting.value = '';
-  });
-
-  /************************************************************************
-   * FILE UPLOAD - ADD (Individual Files)
-   ************************************************************************/
-  fileInputAddEntities.addEventListener('change', async (e) => {
-    if (e.target.files[0]) {
-      pendingAddFiles.entities = e.target.files[0];
-      await processUpload(true);
-    }
-    fileInputAddEntities.value = '';
-  });
-
-  fileInputAddConnections.addEventListener('change', async (e) => {
-    if (e.target.files[0]) {
-      pendingAddFiles.connections = e.target.files[0];
-      await processUpload(true);
-    }
-    fileInputAddConnections.value = '';
-  });
-
-  fileInputAddFormatting.addEventListener('change', async (e) => {
-    if (e.target.files[0]) {
-      pendingAddFiles.formatting = e.target.files[0];
-      // If entities and connections were already processed, load formatting immediately
-      if (!pendingAddFiles.entities && !pendingAddFiles.connections && nodes.length > 0) {
-        await loadFormattingFileOnly(pendingAddFiles.formatting);
-        pendingAddFiles.formatting = null;
-      } else {
-        await processUpload(true);
-      }
-    }
-    fileInputAddFormatting.value = '';
-  });
-
-  async function processUpload(isAppend) {
-    const files = isAppend ? pendingAddFiles : pendingFiles;
-    
-    // Check if we have the minimum required files (entities and connections)
-    if (!files.entities || !files.connections) {
-      // Don't show error yet - user is still uploading files
-      return;
-    }
-    
-    // We have enough files to proceed
-    await handleFileUpload(files, isAppend);
-    
-    // Clear the pending files after successful upload
-    if (isAppend) {
-      pendingAddFiles = { entities: null, connections: null, formatting: null };
-    } else {
-      pendingFiles = { entities: null, connections: null, formatting: null };
-    }
-  }
-
-  async function loadFormattingFileOnly(file) {
-    if (!file) return;
-    
-    try {
-      const formattingData = await parseCSVFile(file);
-      loadFormattingData(formattingData);
-      updateNodeSizes();  // Apply size mode and custom size settings
-      schedulePhysicsRestart();  // Restart physics with new sizes
-      showStatus('Formatting loaded successfully', 'success');
-      invalidateFormatCache();
-      render();
-    } catch (err) {
-      console.error('Formatting file parse error', err);
-      showStatus('Failed to parse formatting file', 'error');
-    }
-  }
-
-  async function handleFileUpload(files, isAppend) {
-    const entitiesFile = files.entities;
-    const connectionsFile = files.connections;
-    const formattingFile = files.formatting;
-
-    
+  async function autoLoadData() {
     loadingOverlay.style.display = 'flex';
-    loadingText.textContent = isAppend ? 'Adding CSVs...' : 'Loading CSVs...';
+    loadingText.textContent = 'Loading data...';
     
     try {
-      const promises = [
-        parseCSVFile(entitiesFile),
-        parseCSVFile(connectionsFile)
-      ];
-      if (formattingFile) {
-        promises.push(parseCSVFile(formattingFile));
+      const entitiesUrl = CONFIG.dataFolder + 'Entities.csv';
+      const connectionsUrl = CONFIG.dataFolder + 'Connections.csv';
+      const formattingUrl = CONFIG.dataFolder + 'Formatting.csv';
+      const viewsUrl = CONFIG.dataFolder + 'Views.csv';
+      
+      // Fetch entities and connections (required)
+      const [entitiesResponse, connectionsResponse] = await Promise.all([
+        fetch(entitiesUrl),
+        fetch(connectionsUrl)
+      ]);
+      
+      if (!entitiesResponse.ok || !connectionsResponse.ok) {
+        throw new Error('Could not load required data files (Entities.csv and Connections.csv)');
       }
       
-      const results = await Promise.all(promises);
-      const entitiesData = results[0];
-      const connectionsData = results[1];
-      const formattingData = formattingFile ? results[2] : null;
+      const entitiesText = await entitiesResponse.text();
+      const connectionsText = await connectionsResponse.text();
       
-      if (formattingData) {
-        loadFormattingData(formattingData);
+      const entitiesData = Papa.parse(entitiesText, { header: true, skipEmptyLines: true }).data;
+      const connectionsData = Papa.parse(connectionsText, { header: true, skipEmptyLines: true }).data;
+      
+      // Try to load formatting (optional)
+      try {
+        const formattingResponse = await fetch(formattingUrl);
+        if (formattingResponse.ok) {
+          const formattingText = await formattingResponse.text();
+          const formattingData = Papa.parse(formattingText, { header: true, skipEmptyLines: true }).data;
+          loadFormattingData(formattingData);
+        }
+      } catch (e) {
+        // Formatting file is optional, ignore errors
+      }
+
+      // Try to load views (optional)
+      try {
+        const viewsResponse = await fetch(viewsUrl);
+        if (viewsResponse.ok) {
+          const viewsText = await viewsResponse.text();
+          const viewsDataParsed = Papa.parse(viewsText, { header: true, skipEmptyLines: true }).data;
+          parseViewsData(viewsDataParsed);
+        }
+      } catch (e) {
+        // Views file is optional, ignore errors
       }
       
-      if (isAppend) {
-        appendSession(entitiesData, connectionsData);
-        showStatus(`Added ${entitiesData.length} entities`, 'success');
-      } else {
-        loadSession(entitiesData, connectionsData);
-        showStatus(`Loaded ${nodes.length} entities, ${links.length} connections`, 'success');
-      }
+      loadSession(entitiesData, connectionsData);
       
-      hasUnsavedChanges = false;
-      updateDownloadButton();
     } catch (err) {
-      console.error('CSV parse error', err);
-      showStatus('Failed to parse CSV files', 'error');
-      loadingOverlay.style.display = 'none';
+      console.error('Failed to load data:', err);
+      loadingText.textContent = 'Error: ' + err.message;
+      setTimeout(() => {
+        // Update story button visibility
+    updateStoryButtonVisibility();
+
+    loadingOverlay.style.display = 'none';
+      }, 3000);
     }
   }
 
-  function parseCSVFile(file) {
-    return new Promise((resolve, reject) => {
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => resolve(results.data),
-        error: (error) => reject(error)
-      });
+  function parseViewsData(data) {
+    if (!data || data.length === 0) return;
+    
+    // Clean headers
+    data.forEach(r => { 
+      Object.keys(r).forEach(k => { 
+        if (k !== k.trim()) { 
+          r[k.trim()] = r[k]; 
+          delete r[k]; 
+        } 
+      }); 
+    });
+
+    viewsData = data.map(r => ({
+      id: String(r['View ID'] || '').trim(),
+      title: String(r['View Title'] || '').trim(),
+      text: String(r['View Text'] || '').trim(),
+      image: String(r['View Image'] || '').trim()
+    })).filter(v => v.id);
+
+    // Build views by ID map
+    viewsById.clear();
+    viewsData.forEach(v => {
+      viewsById.set(v.id, v);
+    });
+
+    // Sort view IDs numerically
+    sortedViewIds = viewsData.map(v => v.id).sort((a, b) => {
+      const numA = parseInt(a);
+      const numB = parseInt(b);
+      if (!isNaN(numA) && !isNaN(numB)) {
+        return numA - numB;
+      }
+      return a.localeCompare(b);
     });
   }
 
   function loadFormattingData(data) {
     if (!data || data.length === 0) return;
     
-    // Clear existing conditional formats
+    // Clean headers (remove extra spaces)
+    data.forEach(r => { 
+      Object.keys(r).forEach(k => { 
+        if (k !== k.trim()) { 
+          r[k.trim()] = r[k]; 
+          delete r[k]; 
+        } 
+      }); 
+    });
+    
     conditionalFormats = [];
     
-    // Process each row
     data.forEach(row => {
-      if ((row.RuleType && row.RuleType.toLowerCase() === 'default') || !row.RuleType) {
-        // Load default formatting settings
-        if (row.NodeColor) {
-          formattingSettings.nodeColor = row.NodeColor;
-          fmtNodeColor.value = row.NodeColor;
-        }
-        if (row.NodeHoverColor) {
-          formattingSettings.nodeHoverColor = row.NodeHoverColor;
-          fmtNodeHoverColor.value = row.NodeHoverColor;
-        }
-        if (row.LineColor) {
-          formattingSettings.lineColor = row.LineColor;
-          fmtLineColor.value = row.LineColor;
-        }
-        if (row.LineHoverColor) {
-          formattingSettings.lineHoverColor = row.LineHoverColor;
-          fmtLineHoverColor.value = row.LineHoverColor;
-        }
-        if (row.LineThickness) {
-          formattingSettings.lineThickness = parseFloat(row.LineThickness);
-          fmtLineThickness.value = row.LineThickness;
-        }
-        if (row.LineHoverThickness) {
-          formattingSettings.lineHoverThickness = parseFloat(row.LineHoverThickness);
-          fmtLineHoverThickness.value = row.LineHoverThickness;
-        }
-        if (row.OutlineColor) {
-          formattingSettings.outlineColor = row.OutlineColor;
-          fmtOutlineColor.value = row.OutlineColor;
-        }
-        if (row.OutlineHoverColor) {
-          formattingSettings.outlineHoverColor = row.OutlineHoverColor;
-          fmtOutlineHoverColor.value = row.OutlineHoverColor;
-        }
-        if (row.OutlineThickness) {
-          formattingSettings.outlineThickness = parseFloat(row.OutlineThickness);
-          fmtOutlineThickness.value = row.OutlineThickness;
-        }
-        if (row.OutlineHoverThickness) {
-          formattingSettings.outlineHoverThickness = parseFloat(row.OutlineHoverThickness);
-          fmtOutlineHoverThickness.value = row.OutlineHoverThickness;
-        }
+      if (row.RuleType === 'Default' || !row.RuleType) {
+        if (row.NodeColor) formattingSettings.nodeColor = row.NodeColor;
+        if (row.NodeHoverColor) formattingSettings.nodeHoverColor = row.NodeHoverColor;
+        if (row.LineColor) formattingSettings.lineColor = row.LineColor;
+        if (row.LineHoverColor) formattingSettings.lineHoverColor = row.LineHoverColor;
+        if (row.LineThickness) formattingSettings.lineThickness = parseFloat(row.LineThickness);
+        if (row.LineHoverThickness) formattingSettings.lineHoverThickness = parseFloat(row.LineHoverThickness);
+        if (row.OutlineColor) formattingSettings.outlineColor = row.OutlineColor;
+        if (row.OutlineHoverColor) formattingSettings.outlineHoverColor = row.OutlineHoverColor;
+        if (row.OutlineThickness) formattingSettings.outlineThickness = parseFloat(row.OutlineThickness);
+        if (row.OutlineHoverThickness) formattingSettings.outlineHoverThickness = parseFloat(row.OutlineHoverThickness);
         if (row.BackgroundColor) {
           formattingSettings.backgroundColor = row.BackgroundColor;
-          fmtBgColor.value = row.BackgroundColor;
           document.documentElement.style.setProperty('--bg-white', row.BackgroundColor);
         }
-        // Load size mode settings
-        if (row.SizeMode) {
-          formattingSettings.nodeSizeMode = row.SizeMode.toLowerCase();
-          fmtSizeMode.value = row.SizeMode.toLowerCase();
-          if (row.SizeMode.toLowerCase() === 'custom') {
-            customSizeControl.style.display = 'flex';
-          } else {
-            customSizeControl.style.display = 'none';
-          }
-        }
-        if (row.CustomNodeSize) {
-          formattingSettings.customNodeSize = parseFloat(row.CustomNodeSize);
-          fmtCustomSize.value = row.CustomNodeSize;
-        }
-      } else if (row.RuleType && (row.RuleType.toLowerCase() === 'entity' || row.RuleType.toLowerCase() === 'category')) {
-        // Load conditional format rule
+        if (row.SizeMode) formattingSettings.nodeSizeMode = row.SizeMode;
+        if (row.CustomNodeSize) formattingSettings.customNodeSize = parseFloat(row.CustomNodeSize);
+      } else if (row.RuleType === 'Entity' || row.RuleType === 'Category') {
         const targets = row.Targets ? row.Targets.split('|').map(t => t.trim()).filter(t => t) : [];
         
         const parsedNodeSize = row.NodeSize ? parseFloat(row.NodeSize) : null;
-        const parsedSizeEnabled = String(row.SizeEnabled).toLowerCase() === 'true';
+        const parsedNodeColor = row.NodeColor || null;
+        const parsedOutlineColor = row.OutlineColor || null;
+        const parsedOutlineThickness = row.OutlineThickness ? parseFloat(row.OutlineThickness) : null;
+        const parsedLineColor = row.LineColor || null;
+        const parsedLineThickness = row.LineThickness ? parseFloat(row.LineThickness) : null;
         
         conditionalFormats.push({
           type: row.RuleType.toLowerCase(),
           name: row.RuleName || 'Unnamed Rule',
           order: parseInt(row.Order) || conditionalFormats.length,
           targets: targets,
-          nodeEnabled: String(row.NodeEnabled).toLowerCase() === 'true',
-          nodeColor: row.NodeColor || null,
-          outlineEnabled: String(row.OutlineEnabled).toLowerCase() === 'true',
-          outlineColor: row.OutlineColor || null,
-          outlineThickness: row.OutlineThickness ? parseFloat(row.OutlineThickness) : null,
-          sizeEnabled: parsedNodeSize ? true : parsedSizeEnabled,  // Auto-enable if nodeSize exists
+          nodeEnabled: parsedNodeColor ? true : (String(row.NodeEnabled).toLowerCase() === 'true'),
+          nodeColor: parsedNodeColor,
+          outlineEnabled: (parsedOutlineColor || parsedOutlineThickness) ? true : (String(row.OutlineEnabled).toLowerCase() === 'true'),
+          outlineColor: parsedOutlineColor,
+          outlineThickness: parsedOutlineThickness,
+          sizeEnabled: parsedNodeSize ? true : (String(row.SizeEnabled).toLowerCase() === 'true'),
           nodeSize: parsedNodeSize,
-          lineEnabled: String(row.LineEnabled).toLowerCase() === 'true',
-          lineColor: row.LineColor || null,
-          lineThickness: row.LineThickness ? parseFloat(row.LineThickness) : null
+          lineEnabled: (parsedLineColor || parsedLineThickness) ? true : (String(row.LineEnabled).toLowerCase() === 'true'),
+          lineColor: parsedLineColor,
+          lineThickness: parsedLineThickness
         });
       }
     });
     
-    // Sort conditional formats by order
     conditionalFormats.sort((a, b) => a.order - b.order);
-    
-    // Update the dropdown
-    updateFormatRuleSelector();
     invalidateFormatCache();
-    applyNodeSizeScale();
-  }
-
-  function showStatus(msg, type = 'success') {
-    statusMsg.textContent = msg;
-    statusMsg.className = 'status-msg' + (type === 'error' ? ' error' : '');
-    setTimeout(() => {
-      statusMsg.textContent = '';
-    }, 5000);
   }
 
   /************************************************************************
-   * CONFIRM DIALOG
-   ************************************************************************/
-  let confirmCallback = null;
-
-  function showConfirmDialog(message, onConfirm) {
-    confirmMessage.textContent = message;
-    confirmCallback = onConfirm;
-    confirmDialog.style.display = 'flex';
-  }
-
-  function closeConfirmDialog() {
-    confirmDialog.style.display = 'none';
-    confirmCallback = null;
-  }
-
-  document.getElementById('confirm-yes').addEventListener('click', () => {
-    if (confirmCallback) {
-      confirmCallback();
-    }
-    closeConfirmDialog();
-  });
-
-  document.getElementById('confirm-no').addEventListener('click', closeConfirmDialog);
-
-  /************************************************************************
-   * LOAD SESSION (REPLACE)
+   * LOAD SESSION
    ************************************************************************/
   function loadSession(entitiesData, connectionsData) {
     // Clean headers
@@ -2488,9 +964,20 @@
       }); 
     });
 
+    // Check if Entities.csv has Views column
+    if (entitiesData.length > 0) {
+      hasViewsColumn = 'Views' in entitiesData[0];
+    }
+
     // Create nodes
     nodes = entitiesData.map((d, i) => createNodeFromData(d, i));
     nodeById = new Map(nodes.map(n => [n.id, n]));
+
+    // Build entity views map if we have views
+    if (hasViewsColumn) {
+      buildEntityViewsMap(entitiesData);
+      buildViewEntitiesCache();
+    }
 
     // Create links
     processLinksData(connectionsData);
@@ -2503,92 +990,185 @@
     // Calculate node sizes
     updateNodeSizes();
 
+    // Store original positions for rescaling on resize
+    storeOriginalPositions();
+
+    // Scale nodes to fit canvas (replaces centerNodesInCanvas)
+    scaleNodesToFit();
+
     // Load images
     loadAllImages();
-
-    // Update entity table
-    updateEntityTable();
 
     // Start physics
     updatePhysics();
 
+    // Update story button visibility
+    updateStoryButtonVisibility();
+
     loadingOverlay.style.display = 'none';
   }
 
-  /************************************************************************
-   * APPEND SESSION (ADD)
-   ************************************************************************/
-  function appendSession(entitiesData, connectionsData) {
-    // Clean headers
-    entitiesData.forEach(r => { 
-      Object.keys(r).forEach(k => { 
-        if (k !== k.trim()) { 
-          r[k.trim()] = r[k]; 
-          delete r[k]; 
-        } 
-      }); 
+  // Store original data for rescaling on resize
+  let originalNodePositions = new Map();
+  let originalDataBounds = null;
+  let currentScaleFactor = 1.0;
+  
+  function storeOriginalPositions() {
+    originalNodePositions.clear();
+    nodes.forEach(n => {
+      const x = n.raw && !isNaN(parseFloat(n.raw['X'])) ? parseFloat(n.raw['X']) : n.x;
+      const y = n.raw && !isNaN(parseFloat(n.raw['Y'])) ? parseFloat(n.raw['Y']) : n.y;
+      originalNodePositions.set(n.id, { 
+        x, 
+        y, 
+        isFixed: n.isFixed,
+        baseR: n.baseR || formattingSettings.minNodeSize
+      });
     });
     
-    connectionsData.forEach(r => { 
-      Object.keys(r).forEach(k => { 
-        if (k !== k.trim()) { 
-          r[k.trim()] = r[k]; 
-          delete r[k]; 
-        } 
-      }); 
-    });
-
-    // Add or update nodes
-    entitiesData.forEach((d, i) => {
-      const newNode = createNodeFromData(d, i);
-      const existing = nodeById.get(newNode.id);
+    // Calculate and store original data bounds
+    const positionedNodes = nodes.filter(n => n.isFixed || (n.raw && !isNaN(parseFloat(n.raw['X']))));
+    if (positionedNodes.length >= 2) {
+      let minX = Infinity, maxX = -Infinity;
+      let minY = Infinity, maxY = -Infinity;
       
-      if (existing) {
-        // Replace existing node with new data
-        const index = nodes.indexOf(existing);
-        nodes[index] = newNode;
-        nodeById.set(newNode.id, newNode);
+      positionedNodes.forEach(n => {
+        const orig = originalNodePositions.get(n.id);
+        minX = Math.min(minX, orig.x);
+        maxX = Math.max(maxX, orig.x);
+        minY = Math.min(minY, orig.y);
+        maxY = Math.max(maxY, orig.y);
+      });
+      
+      originalDataBounds = {
+        minX, maxX, minY, maxY,
+        width: maxX - minX,
+        height: maxY - minY,
+        centerX: (minX + maxX) / 2,
+        centerY: (minY + maxY) / 2
+      };
+    }
+  }
+
+  function scaleNodesToFit() {
+    if (nodes.length === 0) return;
+    
+    // Need original positions and bounds
+    if (originalNodePositions.size === 0 || !originalDataBounds) {
+      centerNodesInCanvas();
+      return;
+    }
+    
+    const dataWidth = originalDataBounds.width;
+    const dataHeight = originalDataBounds.height;
+    
+    if (dataWidth === 0 || dataHeight === 0) {
+      centerNodesInCanvas();
+      return;
+    }
+    
+    // Calculate available canvas space (with fixed margin for padding)
+    const margin = PADDING + 40; // Fixed margin for largest expected scaled node
+    
+    const canvasW = (canvas.width / devicePixelRatio) - margin * 2;
+    const canvasH = (canvas.height / devicePixelRatio) - margin * 2;
+    
+    // Calculate scale factor (preserving aspect ratio)
+    const scaleX = canvasW / dataWidth;
+    const scaleY = canvasH / dataHeight;
+    currentScaleFactor = Math.min(scaleX, scaleY);
+    
+    // Clamp scale factor to reasonable bounds
+    currentScaleFactor = Math.max(0.1, Math.min(currentScaleFactor, 3.0));
+    
+    // Calculate canvas center
+    const canvasCenterX = (canvas.width / devicePixelRatio) / 2;
+    const canvasCenterY = (canvas.height / devicePixelRatio) / 2;
+    
+    // Apply transformation to all nodes
+    nodes.forEach(n => {
+      const orig = originalNodePositions.get(n.id);
+      if (!orig) return;
+      
+      // Scale position relative to data center, then translate to canvas center
+      const newX = (orig.x - originalDataBounds.centerX) * currentScaleFactor + canvasCenterX;
+      const newY = (orig.y - originalDataBounds.centerY) * currentScaleFactor + canvasCenterY;
+      
+      n.x = newX;
+      n.y = newY;
+      
+      if (n.isFixed) {
+        n.fx = newX;
+        n.fy = newY;
+      }
+      
+      if (n.unfixedX !== null) {
+        n.unfixedX = newX;
+        n.unfixedY = newY;
+      }
+      
+      // Scale node radius - check for conditional format first
+      const format = getNodeFormat(n);
+      if (format?.sizeEnabled && format?.nodeSize) {
+        n.r = (format.nodeSize * currentScaleFactor) / 2;
       } else {
-        // Add new node
-        nodes.push(newNode);
-        nodeById.set(newNode.id, newNode);
+        n.r = orig.baseR * currentScaleFactor;
       }
     });
+    
+    // Update collision force with new radii
+    if (simulation && simulation.force('collision')) {
+      simulation.force('collision').radius(d => d.r + CONFIG.force.collisionPadding);
+    }
+  }
 
-    // Process links
-    processLinksData(connectionsData);
-
-    // Rebuild adjacency
-    buildAdjacency();
-
-    nameIndex = nodes.map(n => n.name);
-
-    // Recalculate node sizes
-    updateNodeSizes();
-
-    // Load new images
-    loadAllImages();
-
-    // Update entity table
-    updateEntityTable();
-
-    // Restart physics
-    updatePhysics();
-
-    loadingOverlay.style.display = 'none';
+  function centerNodesInCanvas() {
+    if (nodes.length === 0) return;
+    
+    // Calculate bounding box of all nodes
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+    
+    nodes.forEach(n => {
+      if (n.x < minX) minX = n.x;
+      if (n.x > maxX) maxX = n.x;
+      if (n.y < minY) minY = n.y;
+      if (n.y > maxY) maxY = n.y;
+    });
+    
+    // Calculate centroid of nodes
+    const nodesCenterX = (minX + maxX) / 2;
+    const nodesCenterY = (minY + maxY) / 2;
+    
+    // Calculate canvas center
+    const canvasCenterX = (canvas.width / devicePixelRatio) / 2;
+    const canvasCenterY = (canvas.height / devicePixelRatio) / 2;
+    
+    // Calculate offset to center nodes
+    const offsetX = canvasCenterX - nodesCenterX;
+    const offsetY = canvasCenterY - nodesCenterY;
+    
+    // Shift all nodes
+    nodes.forEach(n => {
+      n.x += offsetX;
+      n.y += offsetY;
+      if (n.fx !== null) n.fx += offsetX;
+      if (n.fy !== null) n.fy += offsetY;
+      if (n.unfixedX !== null) n.unfixedX += offsetX;
+      if (n.unfixedY !== null) n.unfixedY += offsetY;
+    });
   }
 
   function createNodeFromData(d, i) {
     const id = d['Entity Name'] ? String(d['Entity Name']).trim() : `__P_${i}`;
     
-    // Parse Show/Fixed/X/Y from CSV
-    const show = d['Show'] === undefined ? true : (String(d['Show']).toLowerCase() === 'true' || d['Show'] === '1' || d['Show'] === true);
-    const isFixed = String(d['Fixed']).toLowerCase() === 'true' || d['Fixed'] === '1' || d['Fixed'] === true;
+    const show = d['Show'] === undefined ? true : (String(d['Show']).toUpperCase() === 'TRUE' || d['Show'] === '1' || d['Show'] === true);
+    const isFixed = String(d['Fixed']).toUpperCase() === 'TRUE' || d['Fixed'] === '1' || d['Fixed'] === true;
     const savedX = parseFloat(d['X']);
     const savedY = parseFloat(d['Y']);
     
-    const x = !isNaN(savedX) && isFixed ? savedX : Math.random() * (canvas.width/devicePixelRatio);
-    const y = !isNaN(savedY) && isFixed ? savedY : Math.random() * (canvas.height/devicePixelRatio);
+    const x = !isNaN(savedX) && isFixed ? savedX : Math.random() * (canvas.width/(devicePixelRatio));
+    const y = !isNaN(savedY) && isFixed ? savedY : Math.random() * (canvas.height/(devicePixelRatio));
     
     return {
       id, 
@@ -2606,7 +1186,8 @@
       unfixedY: null,
       vx: 0, 
       vy: 0, 
-      r: CONFIG.sizeMin
+      baseR: formattingSettings.minNodeSize,
+      r: formattingSettings.minNodeSize
     };
   }
 
@@ -2615,8 +1196,7 @@
       sourceName: (r['A']||'').toString().trim(),
       targetName: (r['B']||'').toString().trim(),
       value: +((r['Link Size']||r['LinkSize']) || 1) || 1,
-      source: (r['Source']||'').toString().trim(),
-      raw: r  // Store the entire original row
+      source: (r['Source']||'').toString().trim()
     })).filter(l => l.sourceName && l.targetName);
 
     // Add missing nodes from links
@@ -2630,17 +1210,18 @@
           isFixed: false,
           image: null, 
           imageBitmap: null, 
-          x: Math.random() * canvas.width, 
-          y: Math.random() * canvas.height, 
+          x: Math.random() * (canvas.width/(devicePixelRatio)), 
+          y: Math.random() * (canvas.height/(devicePixelRatio)), 
           fx: null,
           fy: null,
           unfixedX: null,
           unfixedY: null,
           vx: 0, 
           vy: 0, 
-          r: CONFIG.sizeMin 
+          baseR: formattingSettings.minNodeSize,
+          r: formattingSettings.minNodeSize
         };
-        nodes.push(n); 
+        nodes.push(n);
         nodeById.set(n.id, n);
       }
       if (!nodeById.has(l.targetName)) {
@@ -2652,106 +1233,413 @@
           isFixed: false,
           image: null, 
           imageBitmap: null, 
-          x: Math.random() * canvas.width, 
-          y: Math.random() * canvas.height,
+          x: Math.random() * (canvas.width/(devicePixelRatio)), 
+          y: Math.random() * (canvas.height/(devicePixelRatio)), 
           fx: null,
           fy: null,
           unfixedX: null,
           unfixedY: null,
           vx: 0, 
           vy: 0, 
-          r: CONFIG.sizeMin 
+          baseR: formattingSettings.minNodeSize,
+          r: formattingSettings.minNodeSize
         };
-        nodes.push(n); 
+        nodes.push(n);
         nodeById.set(n.id, n);
       }
     });
 
-    links = tmpLinks.map(l => ({ 
-      source: nodeById.get(l.sourceName), 
-      target: nodeById.get(l.targetName), 
+    // Build links with references to node objects
+    links = tmpLinks.map(l => ({
+      source: nodeById.get(l.sourceName),
+      target: nodeById.get(l.targetName),
       value: l.value,
-      sourceUrl: l.source,
-      raw: l.raw  // Include the raw data
+      sourceUrl: l.source
     })).filter(l => l.source && l.target);
   }
 
-  function buildAdjacency() {
-    adjacency = new Map(); 
-    connectionSources = new Map();
-    nodes.forEach(n => {
-      adjacency.set(n.id, new Set());
-      connectionSources.set(n.id, new Map());
-    });
-    links.forEach(l => {
-      adjacency.get(l.source.id).add(l.target.id);
-      adjacency.get(l.target.id).add(l.source.id);
+  function buildEntityViewsMap(entitiesData) {
+    entityViewsMap.clear();
+    entityHighlightsMap.clear();
+    
+    entitiesData.forEach(row => {
+      const entityName = String(row['Entity Name'] || '').trim();
+      const viewsStr = String(row['Views'] || '').trim();
+      const highlightStr = String(row['View Highlight'] || '').trim();
       
-      if (l.sourceUrl) {
-        connectionSources.get(l.source.id).set(l.target.id, l.sourceUrl);
-        connectionSources.get(l.target.id).set(l.source.id, l.sourceUrl);
+      if (entityName && viewsStr) {
+        const viewIds = viewsStr.split(',').map(id => id.trim()).filter(id => id);
+        entityViewsMap.set(entityName, viewIds);
+      }
+      
+      if (entityName && highlightStr) {
+        const highlightViewIds = highlightStr.split(',').map(id => id.trim()).filter(id => id);
+        entityHighlightsMap.set(entityName, new Set(highlightViewIds));
       }
     });
   }
 
-  function updateNodeSizes() {
-    const minSize = formattingSettings.minNodeSize;
-    const maxSize = formattingSettings.maxNodeSize;
+  function buildViewEntitiesCache() {
+    viewEntitiesCache.clear();
     
-    if (formattingSettings.nodeSizeMode === 'custom') {
-      // Use custom size for all nodes
-      const customSize = formattingSettings.customNodeSize;
-      nodes.forEach(n => {
-        n.baseR = customSize;
+    // Initialize cache for all views
+    sortedViewIds.forEach(viewId => {
+      viewEntitiesCache.set(viewId, []);
+    });
+
+    // Populate cache
+    entityViewsMap.forEach((viewIds, entityId) => {
+      viewIds.forEach(viewId => {
+        // Only add if view exists in viewsById
+        if (viewsById.has(viewId)) {
+          const entityList = viewEntitiesCache.get(viewId);
+          if (entityList) {
+            entityList.push(entityId);
+          }
+        }
       });
-    } else {
-      // Calculate size based on connections: 250 * (N / T)
-      // N = Number of connections for entity
-      // T = Total number of connections for all entities
+    });
+  }
+
+  function updateStoryButtonVisibility() {
+    const shouldShow = viewsData.length > 0 && hasViewsColumn;
+    storyBtn.style.display = shouldShow ? 'block' : 'none';
+  }
+
+  function buildAdjacency() {
+    adjacency.clear();
+    connectionSources.clear();
+    
+    links.forEach(l => {
+      const sId = l.source.id;
+      const tId = l.target.id;
       
-      // Calculate total connections across all entities
-      let totalConnections = 0;
-      nodes.forEach(n => {
-        const connections = adjacency.get(n.id);
-        totalConnections += connections ? connections.size : 0;
-      });
+      if (!adjacency.has(sId)) adjacency.set(sId, new Set());
+      if (!adjacency.has(tId)) adjacency.set(tId, new Set());
+      adjacency.get(sId).add(tId);
+      adjacency.get(tId).add(sId);
       
-      // Avoid division by zero
-      if (totalConnections === 0) {
-        nodes.forEach(n => {
-          n.baseR = minSize; // Use minimum size
-        });
-        applyNodeSizeScale();
-        return;
+      // Track source URLs for connections
+      if (l.sourceUrl) {
+        if (!connectionSources.has(sId)) connectionSources.set(sId, new Map());
+        if (!connectionSources.has(tId)) connectionSources.set(tId, new Map());
+        connectionSources.get(sId).set(tId, l.sourceUrl);
+        connectionSources.get(tId).set(sId, l.sourceUrl);
       }
-      
-      // Calculate size for each node
-      nodes.forEach(n => {
-        const connections = adjacency.get(n.id);
-        const connectionCount = connections ? connections.size : 0;
-        const size = 250 * (connectionCount / totalConnections);
-        n.baseR = Math.max(minSize, Math.min(size, maxSize)); // Clamp between min and max
-      });
+    });
+  }
+
+  /************************************************************************
+   * STORY MODE
+   ************************************************************************/
+  function enterStoryMode() {
+    if (sortedViewIds.length === 0) return;
+    
+    isStoryMode = true;
+    currentViewIndex = 0;
+    
+    // Clear selection
+    selectedNode = null;
+    clearInfoPanel();
+    
+    // Hide normal UI elements
+    storyBtn.style.display = 'none';
+    nodeInfo.style.display = 'none';
+    document.getElementById('node-links').style.display = 'none';
+    connectionsBox.style.display = 'none';
+    
+    // Hide search controls and clear button in story mode
+    document.getElementById('controls').classList.add('story-mode-hide');
+    clearBtn.classList.add('story-mode-hide');
+    
+    // Show story UI elements
+    storyNavContainer.classList.add('active');
+    viewContent.classList.add('active');
+    
+    // Display current view
+    updateStoryModeUI();
+    
+    // Animate pan & zoom to first view's nodes
+    animateToViewNodes();
+  }
+
+  function exitStoryMode() {
+    isStoryMode = false;
+    
+    // Clear selection
+    selectedNode = null;
+    hideEntityModal();
+    
+    // Reset zoom and pan
+    zoomLevel = 1.0;
+    panX = 0;
+    panY = 0;
+    
+    // Show normal UI elements
+    updateStoryButtonVisibility();
+    nodeInfo.style.display = 'block';
+    document.getElementById('node-links').style.display = 'block';
+    connectionsBox.style.display = 'block';
+    
+    // Show search controls and clear button when exiting story mode
+    document.getElementById('controls').classList.remove('story-mode-hide');
+    clearBtn.classList.remove('story-mode-hide');
+    
+    // Hide story UI elements
+    storyNavContainer.classList.remove('active');
+    viewContent.classList.remove('active');
+    
+    // Clear info panel
+    clearInfoPanel();
+    render();
+  }
+
+  function navigateView(direction) {
+    if (direction === 'prev' && currentViewIndex > 0) {
+      currentViewIndex--;
+    } else if (direction === 'next' && currentViewIndex < sortedViewIds.length - 1) {
+      currentViewIndex++;
     }
     
-    applyNodeSizeScale();
+    // Clear selection and hide modal when navigating
+    selectedNode = null;
+    hideEntityModal();
+    
+    updateStoryModeUI();
+    
+    // Animate pan & zoom to focus on current view nodes
+    animateToViewNodes();
   }
-
-  function applyNodeSizeScale() {
-    const scale = formattingSettings.sizeScale;
-    nodes.forEach(n => {
-      // Check if this node has a conditional format with custom nodeSize AND size is enabled
-      const format = getNodeFormat(n);
-      if (format?.sizeEnabled && format?.nodeSize) {
-        // Use conditional format size with scale applied
-        n.r = (format.nodeSize * scale) / 2;
-      } else {
-        // Use base size with scale applied
-        n.r = (n.baseR || 15) * scale;
-      }
+  
+  function animateToViewNodes() {
+    const viewId = sortedViewIds[currentViewIndex];
+    const viewEntities = new Set(viewEntitiesCache.get(viewId) || []);
+    
+    // Filter nodes in current view
+    const viewNodes = nodes.filter(n => viewEntities.has(n.id));
+    
+    if (viewNodes.length === 0) {
+      render();
+      return;
+    }
+    
+    // Calculate bounding box of view nodes including their radii
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    
+    viewNodes.forEach(n => {
+      const radius = n.r || 15; // Use actual node radius
+      minX = Math.min(minX, n.x - radius);
+      maxX = Math.max(maxX, n.x + radius);
+      minY = Math.min(minY, n.y - radius);
+      maxY = Math.max(maxY, n.y + radius);
     });
+    
+    const width = maxX - minX;
+    const height = maxY - minY;
+    const dataCenterX = (minX + maxX) / 2;
+    const dataCenterY = (minY + maxY) / 2;
+    
+    // Calculate target zoom to fit all nodes with padding
+    const canvasWidth = canvas.width / devicePixelRatio;
+    const canvasHeight = canvas.height / devicePixelRatio;
+    const canvasCenterX = canvasWidth / 2;
+    const canvasCenterY = canvasHeight / 2;
+    const padding = 150; // padding in pixels
+    
+    const targetZoomX = width > 0 ? (canvasWidth - padding * 2) / width : 1.5;
+    const targetZoomY = height > 0 ? (canvasHeight - padding * 2) / height : 1.5;
+    let targetZoom = Math.min(targetZoomX, targetZoomY);
+    
+    // Clamp zoom to configured limits
+    targetZoom = Math.max(CONFIG.zoomMin, Math.min(CONFIG.zoomMax, targetZoom));
+    
+    // Calculate target pan to center the nodes
+    // Based on the transform: screen = (data - canvasCenter) * zoom + pan + canvasCenter
+    // To center data at canvasCenter: pan = -(data - canvasCenter) * zoom
+    const targetPanX = -(dataCenterX - canvasCenterX) * targetZoom;
+    const targetPanY = -(dataCenterY - canvasCenterY) * targetZoom;
+    
+    // Store starting values
+    const startZoom = zoomLevel;
+    const startPanX = panX;
+    const startPanY = panY;
+    
+    // Animation parameters
+    const duration = 600; // milliseconds
+    const startTime = Date.now();
+    
+    function animate() {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Ease-in-out function for smooth animation
+      const eased = progress < 0.5 
+        ? 2 * progress * progress 
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+      
+      // Interpolate zoom and pan
+      zoomLevel = startZoom + (targetZoom - startZoom) * eased;
+      panX = startPanX + (targetPanX - startPanX) * eased;
+      panY = startPanY + (targetPanY - startPanY) * eased;
+      
+      render();
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    }
+    
+    animate();
   }
 
+  function updateStoryModeUI() {
+    const viewId = sortedViewIds[currentViewIndex];
+    const view = viewsById.get(viewId);
+    
+    if (!view) return;
+    
+    // Update progress
+    viewProgress.textContent = `View ${currentViewIndex + 1} of ${sortedViewIds.length}`;
+    
+    // Update title
+    viewTitle.textContent = view.title;
+    
+    // Update image
+    if (view.image) {
+      viewImage.src = view.image;
+      viewImage.style.display = 'block';
+    } else {
+      viewImage.style.display = 'none';
+    }
+    
+    // Update text
+    viewText.textContent = view.text;
+    
+    // Update navigation buttons
+    storyPrevBtn.disabled = currentViewIndex === 0;
+    storyNextBtn.disabled = currentViewIndex === sortedViewIds.length - 1;
+  }
+
+  function showEntityModal(node) {
+    entityModal.classList.add('active');
+    populateEntityModal(node);
+  }
+
+  function hideEntityModal() {
+    entityModal.classList.remove('active');
+    selectedNode = null;
+  }
+
+  function populateEntityModal(d) {
+    const desc = (d.raw && (d.raw['Description'] || '')) || '';
+    const category = (d.raw && (d.raw['Category'] || '')) || '';
+
+    const rawLink = (d.raw && (d.raw['Link'] || d.raw['Link '])) || '';
+    const safe = normalizeUrl(rawLink);
+    const rawMoreInfo = (d.raw && (d.raw['DeSmog Profile'] || d.raw['DeSmog Profile'])) || '';
+    const safeMoreInfo = normalizeUrl(rawMoreInfo);
+
+    let links = [];
+    if (safe) links.push(`<a href="${safe}" target="_blank" rel="noopener">More Info</a>`);
+    if (safeMoreInfo) links.push(`<a href="${safeMoreInfo}" target="_blank" rel="noopener">DeSmog Profile</a>`);
+    const linksHTML = links.length > 0 ? links.join(' | ') : '';
+
+    entityModalTitle.html(`
+      <div style="display:flex; align-items:center; gap:8px; font-size:24px; font-weight:700;">
+        <span>${d.name}</span>
+        ${d.image ? `<img src="${d.image}" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">` : ''}
+      </div>
+      ${category ? `<div style="font-size: 15px; font-weight: bold; margin-top: 6px;">${category.replace(/\n/g, '<br>')}</div>` : ''}
+      ${desc ? `<div style="font-size: 13px; font-weight: normal;">${desc}</div>` : ''}
+      ${linksHTML ? `<div style="margin-top: 8px;">${linksHTML}</div>` : ''}
+      <div style="font-size: 14px; font-weight: bold; margin-top: 6px;">
+        <br>
+        <br>Connected to: 
+      </div>
+    `);
+
+    // Get current view's entities for filtering connections
+    const currentViewId = sortedViewIds[currentViewIndex];
+    const currentViewEntities = new Set(viewEntitiesCache.get(currentViewId) || []);
+
+    const conns = Array.from(adjacency.get(d.id) || []).slice();
+    
+    // Filter connections to only show those in current view
+    const filteredConns = conns.filter(name => currentViewEntities.has(name));
+    
+    filteredConns.sort((a,b) => a.localeCompare(b, undefined, {sensitivity:'base'}));
+    entityModalConnections.innerHTML = '';
+    
+    if (filteredConns.length === 0) {
+      entityModalConnections.innerHTML = '<div class="muted" style="margin-top: 8px;">No connections in this view</div>';
+      return;
+    }
+    
+    const connBox = document.createElement('div');
+    connBox.style.marginTop = '8px';
+    connBox.style.background = 'var(--light-grey)';
+    connBox.style.borderRadius = '6px';
+    connBox.style.padding = '6px';
+    connBox.style.border = '1px solid var(--shadow-grey)';
+    connBox.style.maxHeight = '300px';
+    connBox.style.overflow = 'auto';
+    
+    const frag = document.createDocumentFragment();
+    const nodeSourceMap = connectionSources.get(d.id);
+    
+    filteredConns.forEach(name => {
+      const item = document.createElement('div');
+      item.className = 'conn-item';
+      item.style.display = 'flex';
+      item.style.alignItems = 'center';
+      item.style.justifyContent = 'space-between';
+      item.style.gap = '8px';
+      
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = name;
+      nameSpan.style.flex = '1';
+      nameSpan.style.cursor = 'pointer';
+      nameSpan.addEventListener('click', () => {
+        const targetNode = nodeById.get(name);
+        if (targetNode) {
+          selectedNode = targetNode;
+          populateEntityModal(targetNode);
+          render();
+        }
+      });
+      item.appendChild(nameSpan);
+      
+      const sourceUrl = nodeSourceMap ? nodeSourceMap.get(name) : null;
+      if (sourceUrl) {
+        const sourceIcon = document.createElement('a');
+        sourceIcon.href = normalizeUrl(sourceUrl) || '#';
+        sourceIcon.target = '_blank';
+        sourceIcon.rel = 'noopener';
+        sourceIcon.innerHTML = '🔗';
+        sourceIcon.style.fontSize = '16px';
+        sourceIcon.style.textDecoration = 'none';
+        sourceIcon.style.cursor = 'pointer';
+        sourceIcon.style.flexShrink = '0';
+        sourceIcon.title = 'View source';
+        sourceIcon.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+        item.appendChild(sourceIcon);
+      }
+      
+      frag.appendChild(item);
+    });
+    
+    connBox.appendChild(frag);
+    entityModalConnections.appendChild(connBox);
+  }
+
+  /************************************************************************
+   * IMAGE LOADING
+   ************************************************************************/
   function loadAllImages() {
     const imgNodes = nodes.filter(n => n.image && CONFIG.showImages);
     Promise.allSettled(imgNodes.map(n => loadImage(n))).then(() => render());
@@ -2794,110 +1682,8 @@
   }
 
   /************************************************************************
-   * ENTITY TABLE
+   * PHYSICS SIMULATION
    ************************************************************************/
-  function updateEntityTable() {
-    const tableEl = document.getElementById('entity-table');
-    
-    if (nodes.length === 0) {
-      tableEl.innerHTML = '<div class="empty-state">Upload CSVs to get started</div>';
-      return;
-    }
-    
-    tableEl.innerHTML = '';
-    
-    nodes.forEach(node => {
-      const row = document.createElement('div');
-      row.className = 'entity-row';
-      if (selectedNode && selectedNode.id === node.id) {
-        row.classList.add('selected');
-      }
-      
-      // Name
-      const nameEl = document.createElement('div');
-      nameEl.className = 'entity-name';
-      nameEl.textContent = node.name;
-      nameEl.title = node.name;
-      nameEl.addEventListener('click', () => {
-        selectedNode = node;
-        populateInfoPanel(node);
-        updateEntityTable();
-        render();
-      });
-      row.appendChild(nameEl);
-      
-      // Show checkbox
-      const showCell = document.createElement('div');
-      showCell.style.textAlign = 'center';
-      const showCheck = document.createElement('input');
-      showCheck.type = 'checkbox';
-      showCheck.className = 'entity-checkbox';
-      showCheck.checked = node.show;
-      showCheck.addEventListener('change', (e) => {
-        node.show = e.target.checked;
-        markDirty();
-        schedulePhysicsRestart();
-      });
-      showCell.appendChild(showCheck);
-      row.appendChild(showCell);
-      
-      // Fixed checkbox
-      const fixedCell = document.createElement('div');
-      fixedCell.style.textAlign = 'center';
-      const fixedCheck = document.createElement('input');
-      fixedCheck.type = 'checkbox';
-      fixedCheck.className = 'entity-checkbox';
-      fixedCheck.checked = node.isFixed;
-      fixedCheck.addEventListener('change', (e) => {
-        toggleFixed(node, e.target.checked);
-      });
-      fixedCell.appendChild(fixedCheck);
-      row.appendChild(fixedCell);
-      
-      tableEl.appendChild(row);
-    });
-  }
-
-  function toggleAllShow(show) {
-    nodes.forEach(n => n.show = show);
-    markDirty();
-    updateEntityTable();
-    schedulePhysicsRestart();
-  }
-
-  function toggleFixed(node, isFixed) {
-    if (isFixed) {
-      // Fix the node
-      node.isFixed = true;
-      node.fx = node.x;
-      node.fy = node.y;
-    } else {
-      // Unfix the node
-      node.isFixed = false;
-      if (node.unfixedX !== null && node.unfixedY !== null) {
-        node.x = node.unfixedX;
-        node.y = node.unfixedY;
-      }
-      node.fx = null;
-      node.fy = null;
-    }
-    
-    markDirty();
-    schedulePhysicsRestart();
-  }
-
-  /************************************************************************
-   * PHYSICS
-   ************************************************************************/
-  let physicsTimer = null;
-
-  function schedulePhysicsRestart() {
-    clearTimeout(physicsTimer);
-    physicsTimer = setTimeout(() => {
-      updatePhysics();
-    }, 100);
-  }
-
   function updatePhysics() {
     if (simulation) simulation.stop();
     
@@ -2916,15 +1702,15 @@
         .strength(CONFIG.force.linkStrength))
       .force('charge', d3.forceManyBody().strength(CONFIG.force.chargeStrength))
       .force('center', d3.forceCenter(
-        (canvas.width/devicePixelRatio)/2, 
-        (canvas.height/devicePixelRatio)/2
+        (canvas.width/(devicePixelRatio))/2, 
+        (canvas.height/(devicePixelRatio))/2
       ))
       .force('collision', d3.forceCollide().radius(d => d.r + CONFIG.force.collisionPadding))
       .velocityDecay(CONFIG.force.velocityDecay)
       .on('tick', () => {
         visibleNodes.forEach(n => {
-          n.x = Math.max(n.r + PADDING, Math.min((canvas.width/devicePixelRatio) - n.r - PADDING, n.x));
-          n.y = Math.max(n.r + PADDING, Math.min((canvas.height/devicePixelRatio) - n.r - PADDING, n.y));
+          n.x = Math.max(n.r + PADDING, Math.min((canvas.width/(devicePixelRatio)) - n.r - PADDING, n.x));
+          n.y = Math.max(n.r + PADDING, Math.min((canvas.height/(devicePixelRatio)) - n.r - PADDING, n.y));
           
           // Save unfixed positions
           if (!n.isFixed) {
@@ -2937,275 +1723,26 @@
     
     simulation.alpha(0.3).restart();
   }
-
-  /************************************************************************
-   * DOWNLOAD
-   ************************************************************************/
-  function handleDownload() {
-    if (nodes.length === 0) {
-      showStatus('No data to download', 'error');
-      return;
-    }
-    
-    const entitiesCSV = generateEntitiesCSV();
-    const connectionsCSV = generateConnectionsCSV();
-    const formattingCSV = generateFormattingCSV();
-    
-    downloadCSV(entitiesCSV, 'Entities.csv');
-    setTimeout(() => {
-      downloadCSV(connectionsCSV, 'Connections.csv');
-    }, 100);
-    setTimeout(() => {
-      downloadCSV(formattingCSV, 'Formatting.csv');
-    }, 200);
-    
-    hasUnsavedChanges = false;
-    updateDownloadButton();
-    showStatus('CSVs downloaded successfully', 'success');
-  }
-
-  function generateEntitiesCSV() {
-    const data = nodes.map(n => {
-      // Start with all original columns from raw data
-      const row = { ...n.raw };
-      
-      // Override/add the known columns with current values
-      row['Entity Name'] = n.name;
-      row['Description'] = n.raw['Description'] || '';
-      row['Category'] = n.raw['Category'] || '';
-      row['Area'] = n.raw['Area'] || '';
-      row['Sub Area'] = n.raw['Sub Area'] || '';
-      row['Image'] = n.raw['Image'] || '';
-      row['Link'] = n.raw['Link'] || '';
-      row['More Info'] = n.raw['More Info'] || '';
-      row['Show'] = n.show;
-      row['Fixed'] = n.isFixed;
-      row['X'] = n.isFixed ? n.x.toFixed(2) : '';
-      row['Y'] = n.isFixed ? n.y.toFixed(2) : '';
-      
-      return row;
-    });
-    
-    return Papa.unparse(data);
-  }
-
-  function generateConnectionsCSV() {
-    const data = links.map(l => {
-      // Start with all original columns from raw data (if it exists)
-      const row = l.raw ? { ...l.raw } : {};
-      
-      // Override/add the known columns with current values
-      row['A'] = l.source.id || l.source;
-      row['B'] = l.target.id || l.target;
-      row['Link Size'] = l.value || 1;
-      row['Source'] = l.sourceUrl || '';
-      
-      return row;
-    });
-    
-    return Papa.unparse(data);
-  }
   
-  function generateFormattingCSV() {
-    const data = [];
-    
-    // First row: default formatting
-    data.push({
-      'RuleType': 'Default',
-      'RuleName': '',
-      'Order': '',
-      'Targets': '',
-      'NodeColor': formattingSettings.nodeColor,
-      'NodeHoverColor': formattingSettings.nodeHoverColor,
-      'OutlineColor': formattingSettings.outlineColor,
-      'OutlineHoverColor': formattingSettings.outlineHoverColor,
-      'OutlineThickness': formattingSettings.outlineThickness,
-      'OutlineHoverThickness': formattingSettings.outlineHoverThickness,
-      'NodeSize': '',
-      'SizeMode': formattingSettings.nodeSizeMode,
-      'CustomNodeSize': formattingSettings.customNodeSize,
-      'LineColor': formattingSettings.lineColor,
-      'LineHoverColor': formattingSettings.lineHoverColor,
-      'LineThickness': formattingSettings.lineThickness,
-      'LineHoverThickness': formattingSettings.lineHoverThickness,
-      'BackgroundColor': formattingSettings.backgroundColor,
-    });
-    
-    // Add conditional format rules
-    conditionalFormats.forEach((rule, index) => {
-      data.push({
-        'RuleType': rule.type === 'entity' ? 'Entity' : 'Category',
-        'RuleName': rule.name,
-        'Order': index,
-        'Targets': rule.targets.join('|'),
-        'NodeEnabled': rule.nodeEnabled ? 'true' : 'false',
-        'NodeColor': rule.nodeColor || '',
-        'NodeHoverColor': '',
-        'OutlineEnabled': rule.outlineEnabled ? 'true' : 'false',
-        'OutlineColor': rule.outlineColor || '',
-        'OutlineHoverColor': '',
-        'OutlineThickness': rule.outlineThickness || '',
-        'OutlineHoverThickness': '',
-        'SizeEnabled': rule.sizeEnabled ? 'true' : 'false',
-        'NodeSize': rule.nodeSize || '',
-        'SizeMode': '',
-        'CustomNodeSize': '',
-        'LineEnabled': rule.lineEnabled ? 'true' : 'false',
-        'LineColor': rule.lineColor || '',
-        'LineHoverColor': '',
-        'LineThickness': rule.lineThickness || '',
-        'LineHoverThickness': '',
-        'BackgroundColor': '',
-      });
-    });
-    
-    return Papa.unparse(data);
+  let physicsRestartTimer = null;
+  function schedulePhysicsRestart() {
+    if (physicsRestartTimer) clearTimeout(physicsRestartTimer);
+    physicsRestartTimer = setTimeout(() => {
+      updatePhysics();
+    }, 100);
   }
-
-  function downloadCSV(csvContent, filename) {
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    
-    link.setAttribute('href', url);
-    link.setAttribute('download', filename);
-    link.style.visibility = 'hidden';
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    URL.revokeObjectURL(url);
-  }
-
-  function markDirty() {
-    hasUnsavedChanges = true;
-    updateDownloadButton();
-  }
-
-  function updateDownloadButton() {
-    if (hasUnsavedChanges) {
-      downloadBtn.classList.add('unsaved');
-      downloadBtn.title = 'You have unsaved changes - Download CSVs';
-    } else {
-      downloadBtn.classList.remove('unsaved');
-      downloadBtn.title = 'Save';
-    }
-  }
-
-  // Warn before leaving with unsaved changes
-  window.addEventListener('beforeunload', (e) => {
-    if (hasUnsavedChanges && nodes.length > 0) {
-      e.preventDefault();
-      e.returnValue = 'You have unsaved changes. Download CSVs before leaving?';
-      return e.returnValue;
-    }
-  });
 
   /************************************************************************
-   * GRID SNAPPING
-   ************************************************************************/
-    function snapToGrid(x, y) {
-    const width = canvas.width / devicePixelRatio;
-    const height = canvas.height / devicePixelRatio;
-    const centerX = width / 2 + panX * zoomLevel;
-    const centerY = height / 2 + panY * zoomLevel;
-    const gs = 25; // your new grid size
-
-    return {
-        x: Math.round((x - centerX) / gs) * gs + centerX,
-        y: Math.round((y - centerY) / gs) * gs + centerY
-    };
-    }
-
-    function drawGrid() {
-    const width = canvas.width / devicePixelRatio;
-    const height = canvas.height / devicePixelRatio;
-    
-    const centerX = width / 2 + panX * zoomLevel;
-    const centerY = height / 2 + panY * zoomLevel;
-    
-    ctx.save();
-    
-    // Draw regular grid lines
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
-    ctx.lineWidth = 1 / zoomLevel;
-    
-    // Vertical lines from center
-    for (let dx = 0; dx <= width; dx += CONFIG.gridSize) {
-        // Right of center
-        let xRight = centerX + dx;
-        if (xRight <= width) {
-        ctx.beginPath();
-        ctx.moveTo(xRight, 0);
-        ctx.lineTo(xRight, height);
-        ctx.stroke();
-        }
-        // Left of center
-        if (dx > 0) { // avoid drawing center twice
-        let xLeft = centerX - dx;
-        if (xLeft >= 0) {
-            ctx.beginPath();
-            ctx.moveTo(xLeft, 0);
-            ctx.lineTo(xLeft, height);
-            ctx.stroke();
-        }
-        }
-    }
-
-    // Horizontal lines from center
-    for (let dy = 0; dy <= height; dy += CONFIG.gridSize) {
-        // Below center
-        let yDown = centerY + dy;
-        if (yDown <= height) {
-        ctx.beginPath();
-        ctx.moveTo(0, yDown);
-        ctx.lineTo(width, yDown);
-        ctx.stroke();
-        }
-        // Above center
-        if (dy > 0) {
-        let yUp = centerY - dy;
-        if (yUp >= 0) {
-            ctx.beginPath();
-            ctx.moveTo(0, yUp);
-            ctx.lineTo(width, yUp);
-            ctx.stroke();
-        }
-        }
-    }
-    
-    // Draw thicker center lines
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-    ctx.lineWidth = 2 / zoomLevel;
-    
-    // Vertical center line
-    ctx.beginPath();
-    ctx.moveTo(centerX, 0);
-    ctx.lineTo(centerX, height);
-    ctx.stroke();
-    
-    // Horizontal center line
-    ctx.beginPath();
-    ctx.moveTo(0, centerY);
-    ctx.lineTo(width, centerY);
-    ctx.stroke();
-    
-    ctx.restore();
-    }
-
-
-  /************************************************************************
-   * RENDERING
+   * RENDERING HELPERS
    ************************************************************************/
   function clearCanvas() {
     ctx.fillStyle = formattingSettings.backgroundColor;
-    ctx.fillRect(0, 0, canvas.width/devicePixelRatio, canvas.height/devicePixelRatio);
+    ctx.fillRect(0, 0, canvas.width/(devicePixelRatio), canvas.height/(devicePixelRatio));
   }
 
   function applyTransform() {
-    const centerX = (canvas.width/devicePixelRatio) / 2;
-    const centerY = (canvas.height/devicePixelRatio) / 2;
+    const centerX = (canvas.width/(devicePixelRatio)) / 2;
+    const centerY = (canvas.height/(devicePixelRatio)) / 2;
     ctx.translate(centerX + panX, centerY + panY);
     ctx.scale(zoomLevel, zoomLevel);
     ctx.translate(-centerX, -centerY);
@@ -3236,7 +1773,10 @@
     // Use hover colors/thickness if link is connected to hovered node
     // Only use conditional format if lineEnabled is true
     const lineColor = isHovered ? formattingSettings.lineHoverColor : (format?.lineEnabled && format?.lineColor ? format.lineColor : formattingSettings.lineColor);
-    const lineThickness = isHovered ? formattingSettings.lineHoverThickness : (format?.lineEnabled && format?.lineThickness ? format.lineThickness : formattingSettings.lineThickness);
+    const baseLineThickness = isHovered ? formattingSettings.lineHoverThickness : (format?.lineEnabled && format?.lineThickness ? format.lineThickness : formattingSettings.lineThickness);
+    
+    // Scale line thickness with the current scale factor
+    const lineThickness = baseLineThickness * currentScaleFactor;
     
     ctx.beginPath();
     ctx.moveTo(l.source.x, l.source.y);
@@ -3256,13 +1796,28 @@
     const isHovered = hoveredNode && n === hoveredNode;
     const isSelected = selectedNode && n === selectedNode;
     
-    // Use hover colors/thickness if node is hovered OR selected
+    // Check if this node is connected to the hovered node
+    const isConnectedToHovered = hoveredNode && hoveredNode !== n && 
+                                  adjacency.get(hoveredNode.id)?.has(n.id);
+    
+    // Check if this node should be highlighted in the current view (Story Mode)
+    let isHighlightedInView = false;
+    if (isStoryMode && sortedViewIds.length > 0) {
+      const currentViewId = sortedViewIds[currentViewIndex];
+      const highlightViews = entityHighlightsMap.get(n.id);
+      isHighlightedInView = highlightViews && highlightViews.has(currentViewId);
+    }
+    
+    // Use hover colors/thickness if node is hovered OR selected OR highlighted in current view
     // Only use conditional format if the respective section is enabled
     const nodeColor = isHovered ? formattingSettings.nodeHoverColor : (format?.nodeEnabled && format?.nodeColor ? format.nodeColor : formattingSettings.nodeColor);
-    const outlineColor = (isHovered || isSelected) ? formattingSettings.outlineHoverColor : (format?.outlineEnabled && format?.outlineColor ? format.outlineColor : formattingSettings.outlineColor);
-    const outlineThickness = (isHovered || isSelected) ? formattingSettings.outlineHoverThickness : (format?.outlineEnabled && format?.outlineThickness ? format.outlineThickness : formattingSettings.outlineThickness);
+    const outlineColor = (isHovered || isSelected || isConnectedToHovered || isHighlightedInView) ? formattingSettings.outlineHoverColor : (format?.outlineEnabled && format?.outlineColor ? format.outlineColor : formattingSettings.outlineColor);
+    const baseOutlineThickness = (isHovered || isSelected || isConnectedToHovered || isHighlightedInView) ? formattingSettings.outlineHoverThickness : (format?.outlineEnabled && format?.outlineThickness ? format.outlineThickness : formattingSettings.outlineThickness);
     
-    // Node radius already includes conditional format size from applyNodeSizeScale
+    // Scale outline thickness with the current scale factor
+    const outlineThickness = baseOutlineThickness * currentScaleFactor;
+    
+    // Node radius already includes scale factor from scaleNodesToFit
     const r = n.r;
 
     if (showImage && n.imageBitmap) {
@@ -3308,16 +1863,16 @@
     // Add pulsing glow for selected node
     if (selectedNode && n === selectedNode) {
       const pulsePhase = Math.sin(animationTime * 0.002) * 0.5 + 0.5; // Oscillates between 0 and 1
-      const glowSize = 5 + pulsePhase * 10; // Varies between 5 and 15
+      const glowSize = (5 + pulsePhase * 10) * currentScaleFactor; // Scale glow with nodes
       const glowAlpha = 0.5 + pulsePhase * 0.5; // Varies between 0.5 and 1
       
       // Convert hover outline color to rgba for glow effect
       const hoverColor = formattingSettings.outlineHoverColor;
-      const r = parseInt(hoverColor.slice(1, 3), 16);
-      const g = parseInt(hoverColor.slice(3, 5), 16);
-      const b = parseInt(hoverColor.slice(5, 7), 16);
+      const rr = parseInt(hoverColor.slice(1, 3), 16);
+      const gg = parseInt(hoverColor.slice(3, 5), 16);
+      const bb = parseInt(hoverColor.slice(5, 7), 16);
       
-      ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${glowAlpha})`;
+      ctx.shadowColor = `rgba(${rr}, ${gg}, ${bb}, ${glowAlpha})`;
       ctx.shadowBlur = glowSize;
     }
     
@@ -3360,15 +1915,23 @@
   }
 
   function shouldHighlightNode(node) {
+    // In story mode, nodes not in current view should be unhighlighted (low opacity)
+    if (isStoryMode && sortedViewIds.length > 0) {
+      const currentViewId = sortedViewIds[currentViewIndex];
+      const currentViewEntities = new Set(viewEntitiesCache.get(currentViewId) || []);
+      if (!currentViewEntities.has(node.id)) {
+        return false; // Not in current view, show with low opacity
+      }
+    }
+    
     if (!selectedNode) return true;
     const activeSet = new Set([selectedNode.id, ...(adjacency.get(selectedNode.id) || [])]);
     return activeSet.has(node.id);
   }
 
   /************************************************************************
-   * CHART BORDER DRAWING
+   * RENDER
    ************************************************************************/
-
   function render() {
     animationTime = Date.now();
     clearCanvas();
@@ -3377,7 +1940,8 @@
     ctx.save();
     applyTransform();
 
-    const visibleNodes = nodes.filter(n => n.show);
+    // Filter nodes based on story mode
+    let visibleNodes = nodes.filter(n => n.show);
     const highlightedNodes = [];
     const unhighlightedNodes = [];
     
@@ -3389,11 +1953,20 @@
       }
     });
 
+    // Draw unhighlighted nodes first (dimmed)
     unhighlightedNodes.forEach(n => drawNode(n, CONFIG.unconnectedOpacity, CONFIG.showImages));
 
     const highlightedSet = new Set(highlightedNodes.map(n => n.id));
-    const visibleLinks = links.filter(l => l.source.show && l.target.show);
+    let visibleLinks = links.filter(l => l.source.show && l.target.show);
     
+    // In story mode, only show links where BOTH nodes are in current view
+    if (isStoryMode && sortedViewIds.length > 0) {
+      const currentViewId = sortedViewIds[currentViewIndex];
+      const currentViewEntities = new Set(viewEntitiesCache.get(currentViewId) || []);
+      visibleLinks = visibleLinks.filter(l => currentViewEntities.has(l.source.id) && currentViewEntities.has(l.target.id));
+    }
+    
+    // Draw links - ONLY draw links between highlighted nodes when there's a selection
     if (selectedNode) {
       visibleLinks.forEach(l => {
         if (highlightedSet.has(l.source.id) && highlightedSet.has(l.target.id)) {
@@ -3406,17 +1979,10 @@
       });
     }
 
+    // Draw highlighted nodes on top
     highlightedNodes.forEach(n => drawNode(n, CONFIG.pointOpacity, CONFIG.showImages));
 
-    // Draw grid OVER nodes when dragging
-    if (isDraggingNode) {
-      ctx.restore();
-      ctx.save();
-      applyTransform();
-      drawGrid();
-    }
-
-
+    // Draw labels for selected node and its connections
     if (selectedNode) {
       highlightedNodes.forEach(n => {
         if (adjacency.get(selectedNode.id).has(n.id) || n === selectedNode) {
@@ -3425,14 +1991,14 @@
       });
     }
 
+    // Draw label for hovered node (if not already labeled)
     if (hoveredNode && hoveredNode !== selectedNode && hoveredNode.show) {
       drawLabel(hoveredNode);
     }
 
     ctx.restore();
     
-    // Schedule next animation frame only if a node is selected
-    // Use throttled approach to reduce CPU usage
+    // Schedule next animation frame only if a node is selected (for glow animation)
     if (selectedNode && !animationScheduled) {
       animationScheduled = true;
       setTimeout(() => {
@@ -3443,15 +2009,15 @@
   }
 
   /************************************************************************
-   * CANVAS INTERACTION
+   * INTERACTION HELPERS
    ************************************************************************/
   function getCanvasPos(evt) {
     const rect = canvas.getBoundingClientRect();
-    const x = (evt.clientX - rect.left) * (canvas.width / devicePixelRatio) / rect.width;
-    const y = (evt.clientY - rect.top) * (canvas.height / devicePixelRatio) / rect.height;
+    const x = (evt.clientX - rect.left) * (canvas.width / (devicePixelRatio)) / rect.width;
+    const y = (evt.clientY - rect.top) * (canvas.height / (devicePixelRatio)) / rect.height;
     
-    const centerX = (canvas.width/devicePixelRatio) / 2;
-    const centerY = (canvas.height/devicePixelRatio) / 2;
+    const centerX = (canvas.width/(devicePixelRatio)) / 2;
+    const centerY = (canvas.height/(devicePixelRatio)) / 2;
     
     const transformedX = (x - centerX - panX) / zoomLevel + centerX;
     const transformedY = (y - centerY - panY) / zoomLevel + centerY;
@@ -3461,7 +2027,7 @@
 
   function findNodeAtPos(x, y) {
     if (!nodes || nodes.length === 0) return null;
-    const visibleNodes = nodes.filter(n => n.show);
+    let visibleNodes = nodes.filter(n => n.show);
     
     if (selectedNode) {
       const activeSet = new Set([selectedNode.id, ...(adjacency.get(selectedNode.id) || [])]);
@@ -3484,8 +2050,17 @@
     return null;
   }
 
+  function snapToGrid(x, y) {
+    return {
+      x: Math.round(x / CONFIG.gridSize) * CONFIG.gridSize,
+      y: Math.round(y / CONFIG.gridSize) * CONFIG.gridSize
+    };
+  }
+
   function updateCanvasCursor() {
-    if (isDragging || isDraggingNode) {
+    if (isDraggingNode) {
+      canvas.style.cursor = 'grabbing';
+    } else if (isDragging) {
       canvas.style.cursor = 'grabbing';
     } else if (zoomLevel > 1.0) {
       canvas.style.cursor = 'grab';
@@ -3494,43 +2069,42 @@
     }
   }
 
+  /************************************************************************
+   * CANVAS EVENT LISTENERS
+   ************************************************************************/
   canvas.addEventListener('mousedown', (evt) => {
+    if (evt.button !== 0) return;
     
-    didDrag = false; // Reset drag flag for new interaction
+    didDrag = false;
     const pos = getCanvasPos(evt);
-    
-    
     const n = findNodeAtPos(pos.x, pos.y);
     
     if (n) {
-      // Start potential node drag with delay
       mouseDownNode = n;
       mouseDownTime = Date.now();
       
-    dragDelayTimer = setTimeout(() => {
-    if (mouseDownNode === n) {
-        // Stop physics during drag
-        if (simulation) simulation.stop();
-        
-        // Deselect any currently selected node immediately
-        selectedNode = null;
-        clearInfoPanel();
-        updateEntityTable();
-
-        isDraggingNode = true;
-        draggedNode = n;
-        
-        // Save unfixed position before dragging
-        if (!n.isFixed) {
-        n.unfixedX = n.x;
-        n.unfixedY = n.y;
+      dragDelayTimer = setTimeout(() => {
+        if (mouseDownNode === n) {
+          // Stop physics during drag
+          if (simulation) simulation.stop();
+          
+          // Deselect any currently selected node immediately
+          selectedNode = null;
+          clearInfoPanel();
+          
+          isDraggingNode = true;
+          draggedNode = n;
+          
+          // Save unfixed position before dragging
+          if (!n.isFixed) {
+            n.unfixedX = n.x;
+            n.unfixedY = n.y;
+          }
+          
+          updateCanvasCursor();
+          render();
         }
-        
-        updateCanvasCursor();
-        render();
-    }
-    }, CONFIG.dragDelayMs);
-
+      }, CONFIG.dragDelayMs);
       
       evt.preventDefault();
     } else if (zoomLevel > 1.0) {
@@ -3546,16 +2120,16 @@
   });
 
   canvas.addEventListener('mousemove', (evt) => {
-    
     if (isDraggingNode && draggedNode) {
-      didDrag = true; // Mark that actual dragging occurred
+      didDrag = true;
       const pos = getCanvasPos(evt);
-      draggedNode.x = pos.x;
-      draggedNode.y = pos.y;
+      const snapped = snapToGrid(pos.x, pos.y);
+      draggedNode.x = snapped.x;
+      draggedNode.y = snapped.y;
       render();
       evt.preventDefault();
     } else if (isDragging && zoomLevel > 1.0) {
-      didDrag = true; // Mark that actual dragging occurred
+      didDrag = true;
       const deltaX = evt.clientX - dragStartX;
       const deltaY = evt.clientY - dragStartY;
       panX = dragStartPanX + deltaX / zoomLevel;
@@ -3574,65 +2148,72 @@
   });
 
   canvas.addEventListener('mouseup', (evt) => {
-    // Clear drag delay timer
     if (dragDelayTimer) {
       clearTimeout(dragDelayTimer);
       dragDelayTimer = null;
     }
     
     if (isDraggingNode && draggedNode) {
-      // Snap to grid
       const snapped = snapToGrid(draggedNode.x, draggedNode.y);
       draggedNode.x = snapped.x;
       draggedNode.y = snapped.y;
-      
-      // Auto-fix the node
       draggedNode.isFixed = true;
       draggedNode.fx = snapped.x;
       draggedNode.fy = snapped.y;
       
-      markDirty();
-      updateEntityTable();
       schedulePhysicsRestart();
       
       isDraggingNode = false;
       draggedNode = null;
       mouseDownNode = null;
       updateCanvasCursor();
+      render();
       evt.preventDefault();
-    } else if (isDragging) {
-      const deltaX = Math.abs(evt.clientX - dragStartX);
-      const deltaY = Math.abs(evt.clientY - dragStartY);
-      
+      return;
+    }
+    
+    if (isDragging) {
       isDragging = false;
       updateCanvasCursor();
       
-      if (deltaX < 3 && deltaY < 3) {
+      // Only treat as click if we didn't drag
+      if (!didDrag) {
         const pos = getCanvasPos(evt);
         const n = findNodeAtPos(pos.x, pos.y);
         if (n) {
           selectedNode = n;
-          populateInfoPanel(n);
-          updateEntityTable();
+          if (isStoryMode) {
+            showEntityModal(n);
+          } else {
+            populateInfoPanel(n);
+          }
           render();
         } else {
           selectedNode = null;
-          clearInfoPanel();
-          updateEntityTable();
+          if (isStoryMode) {
+            hideEntityModal();
+          } else {
+            clearInfoPanel();
+          }
           render();
         }
       }
       evt.preventDefault();
-    } else if (mouseDownNode) {
-      // Quick click without drag
+      return;
+    }
+    
+    if (mouseDownNode) {
       const timeSinceDown = Date.now() - mouseDownTime;
-      if (timeSinceDown < CONFIG.dragDelayMs) {
+      if (timeSinceDown < CONFIG.dragDelayMs && !didDrag) {
         const pos = getCanvasPos(evt);
         const n = findNodeAtPos(pos.x, pos.y);
         if (n && n === mouseDownNode) {
           selectedNode = n;
-          populateInfoPanel(n);
-          updateEntityTable();
+          if (isStoryMode) {
+            showEntityModal(n);
+          } else {
+            populateInfoPanel(n);
+          }
           render();
         }
       }
@@ -3642,22 +2223,28 @@
 
   canvas.addEventListener('click', (evt) => {
     if (didDrag) {
-        didDrag = false;
-        evt.preventDefault();
-        return; // skip click logic after dragging
+      didDrag = false;
+      evt.preventDefault();
+      return;
     }
     if (isDragging || isDraggingNode) return;
     const pos = getCanvasPos(evt);
     const n = findNodeAtPos(pos.x, pos.y);
     if (n) {
       selectedNode = n;
-      populateInfoPanel(n);
-      updateEntityTable();
+      if (isStoryMode) {
+        showEntityModal(n);
+      } else {
+        populateInfoPanel(n);
+      }
       render();
     } else {
       selectedNode = null;
-      clearInfoPanel();
-      updateEntityTable();
+      if (isStoryMode) {
+        hideEntityModal();
+      } else {
+        clearInfoPanel();
+      }
       render();
     }
   });
@@ -3669,9 +2256,8 @@
     }
     
     isDragging = false;
-    didDrag = false; // Reset drag flag when leaving canvas
+    didDrag = false;
     if (isDraggingNode) {
-      // Restart physics if we were dragging
       schedulePhysicsRestart();
     }
     isDraggingNode = false;
@@ -3681,6 +2267,15 @@
     if (hoveredNode) {
       hoveredNode = null;
       render();
+    }
+  });
+
+  canvas.addEventListener('wheel', (evt) => {
+    evt.preventDefault();
+    if (evt.deltaY < 0) {
+      zoomIn();
+    } else {
+      zoomOut();
     }
   });
 
@@ -3711,6 +2306,37 @@
   zoomOutBtn.addEventListener('click', zoomOut);
   zoomResetBtn.addEventListener('click', resetZoom);
 
+  /************************************************************************
+   * PANEL TOGGLE
+   ************************************************************************/
+  const panelToggleBtn = document.getElementById('panel-toggle');
+  const infoPanel = document.getElementById('info-panel');
+  
+  function togglePanel() {
+    const wasCollapsed = infoPanel.classList.contains('collapsed');
+    const isCollapsed = infoPanel.classList.toggle('collapsed');
+    panelToggleBtn.textContent = isCollapsed ? '◀' : '▶';
+    
+    // Calculate the offset change (panel is 500px when expanded)
+    const panelWidth = 500;
+    const offsetChange = isCollapsed ? panelWidth / 2 : -panelWidth / 2;
+    
+    // Resize canvas after transition
+    setTimeout(() => {
+      resizeCanvas();
+      
+      // Adjust all node positions to recenter them
+      nodes.forEach(n => {
+        n.x += offsetChange;
+        if (n.fx !== undefined) n.fx += offsetChange;
+        if (n.unfixedX !== null) n.unfixedX += offsetChange;
+      });
+      
+      render();
+    }, 320);
+  }
+  
+  panelToggleBtn.addEventListener('click', togglePanel);
 
   /************************************************************************
    * INFO PANEL
@@ -3727,18 +2353,16 @@
     const desc = (d.raw && (d.raw['Description'] || '')) || '';
     const category = (d.raw && (d.raw['Category'] || '')) || '';
 
-    // Build the links FIRST
     const rawLink = (d.raw && (d.raw['Link'] || d.raw['Link '])) || '';
     const safe = normalizeUrl(rawLink);
-    const rawMoreInfo = (d.raw && (d.raw['More Info'] || d.raw['More Info'])) || '';
+    const rawMoreInfo = (d.raw && (d.raw['DeSmog Profile'] || d.raw['DeSmog Profile'])) || '';
     const safeMoreInfo = normalizeUrl(rawMoreInfo);
 
     let links = [];
     if (safe) links.push(`<a href="${safe}" target="_blank" rel="noopener">More Info</a>`);
-    if (safeMoreInfo) links.push(`<a href="${safeMoreInfo}" target="_blank" rel="noopener">More Info</a>`);
+    if (safeMoreInfo) links.push(`<a href="${safeMoreInfo}" target="_blank" rel="noopener">DeSmog Profile</a>`);
     const linksHTML = links.length > 0 ? links.join(' | ') : '';
 
-    // Now set the title area INCLUDING the links
     nodeTitleEl.html(`
       <div style="display:flex; align-items:center; gap:8px; font-size:24px; font-weight:700;">
         <span>${d.name}</span>
@@ -3753,7 +2377,6 @@
       </div>
     `);
 
-    // Clear the old nodeLinkEl since we're not using it anymore
     nodeLinkEl.html('');
 
     const conns = Array.from(adjacency.get(d.id) || []).slice();
@@ -3782,7 +2405,6 @@
         if (targetNode) {
           selectedNode = targetNode;
           populateInfoPanel(targetNode);
-          updateEntityTable();
           render();
           connectionsBox.scrollTop = 0;
         }
@@ -3813,12 +2435,15 @@
   }
 
   function clearInfoPanel() {
-    nodeTitleEl.html('Select a node to view details');
+    nodeTitleEl.html('Select a node or start story');
     nodeMetaEl.text('');
     nodeLinkEl.html('');
     connectionsBox.innerHTML = '';
   }
 
+  /************************************************************************
+   * SEARCH
+   ************************************************************************/
   searchInput.addEventListener('input', onSearchInput);
   searchBtn.addEventListener('click', () => performSearch(searchInput.value.trim()));
   searchInput.addEventListener('keydown', (ev) => { 
@@ -3829,9 +2454,14 @@
   });
 
   clearBtn.addEventListener('click', () => { 
-    selectedNode = null; 
-    clearInfoPanel(); 
-    updateEntityTable();
+    selectedNode = null;
+    
+    if (isStoryMode) {
+      hideEntityModal();
+    } else {
+      clearInfoPanel();
+    }
+    
     render(); 
     searchInput.value = ''; 
     suggestionsEl.style('display', 'none').html(''); 
@@ -3845,7 +2475,16 @@
     if (!q || q.length < 3) return;
     const term = q.toLowerCase();
     const matches = [];
-    for (const name of nameIndex) {
+    
+    // In story mode, only search within current view's entities
+    let searchSpace = nameIndex;
+    if (isStoryMode && sortedViewIds.length > 0) {
+      const currentViewId = sortedViewIds[currentViewIndex];
+      const currentViewEntities = viewEntitiesCache.get(currentViewId) || [];
+      searchSpace = currentViewEntities;
+    }
+    
+    for (const name of searchSpace) {
       if (name && name.toLowerCase().includes(term)) matches.push(name);
       if (matches.length >= CONFIG.maxSuggestions) break;
     }
@@ -3865,20 +2504,39 @@
 
   function performSearch(q) {
     if (!q) return;
-    const exact = nodes.find(n => n.name && n.name.toLowerCase() === q.toLowerCase());
+    
+    // In story mode, only search within current view's entities
+    let searchNodes = nodes;
+    if (isStoryMode && sortedViewIds.length > 0) {
+      const currentViewId = sortedViewIds[currentViewIndex];
+      const currentViewEntities = new Set(viewEntitiesCache.get(currentViewId) || []);
+      searchNodes = nodes.filter(n => currentViewEntities.has(n.id));
+    }
+    
+    const exact = searchNodes.find(n => n.name && n.name.toLowerCase() === q.toLowerCase());
     if (exact) {
-      selectedNode = exact; 
-      populateInfoPanel(exact); 
-      updateEntityTable();
+      selectedNode = exact;
+      
+      if (isStoryMode) {
+        showEntityModal(exact);
+      } else {
+        populateInfoPanel(exact);
+      }
+      
       render(); 
       msgEl.text(''); 
       return;
     }
-    const matches = nodes.filter(n => n.name && n.name.toLowerCase().includes(q.toLowerCase()));
+    const matches = searchNodes.filter(n => n.name && n.name.toLowerCase().includes(q.toLowerCase()));
     if (matches.length === 1) {
-      selectedNode = matches[0]; 
-      populateInfoPanel(matches[0]); 
-      updateEntityTable();
+      selectedNode = matches[0];
+      
+      if (isStoryMode) {
+        showEntityModal(matches[0]);
+      } else {
+        populateInfoPanel(matches[0]);
+      }
+      
       render(); 
       msgEl.text(''); 
       return;
@@ -3889,8 +2547,13 @@
           searchInput.value = m.name;
           suggestionsEl.style('display','none').html('');
           selectedNode = m;
-          populateInfoPanel(m);
-          updateEntityTable();
+          
+          if (isStoryMode) {
+            showEntityModal(m);
+          } else {
+            populateInfoPanel(m);
+          }
+          
           render();
         });
       });
@@ -3902,25 +2565,19 @@
   }
 
   /************************************************************************
-   * KEYBOARD SHORTCUTS
+   * STORY MODE EVENT LISTENERS
    ************************************************************************/
-  document.addEventListener('keydown', (e) => {
-    // Ctrl+S / Cmd+S to download
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-      e.preventDefault();
-      handleDownload();
-    }
-    
-    // Escape to close confirm dialog
-    if (e.key === 'Escape') {
-      closeConfirmDialog();
-    }
-  });
+  storyBtn.addEventListener('click', enterStoryMode);
+  storyExitBtn.addEventListener('click', exitStoryMode);
+  storyPrevBtn.addEventListener('click', () => navigateView('prev'));
+  storyNextBtn.addEventListener('click', () => navigateView('next'));
+  entityModalClose.addEventListener('click', hideEntityModal);
 
   /************************************************************************
-   * INITIAL RENDER
+   * INITIALIZE
    ************************************************************************/
   render();
+  autoLoadData();
   </script>
 </body>
 </html>
